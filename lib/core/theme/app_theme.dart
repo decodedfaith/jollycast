@@ -17,7 +17,7 @@ class AppTheme {
         onSecondary: Colors.black,
         onSurface: Colors.white,
       ),
-      
+
       // Text Theme (Google Fonts will be applied in main.dart or here if needed)
       textTheme: const TextTheme(
         headlineLarge: TextStyle(
@@ -30,16 +30,10 @@ class AppTheme {
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
-        bodyLarge: TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 16,
-        ),
-        bodyMedium: TextStyle(
-          color: AppColors.textSecondary,
-          fontSize: 14,
-        ),
+        bodyLarge: TextStyle(color: AppColors.textPrimary, fontSize: 16),
+        bodyMedium: TextStyle(color: AppColors.textSecondary, fontSize: 14),
       ),
-      
+
       // Input Decoration
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -49,9 +43,12 @@ class AppTheme {
           borderSide: BorderSide.none,
         ),
         hintStyle: const TextStyle(color: Colors.grey),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
       ),
-      
+
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -62,10 +59,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(30),
             side: const BorderSide(color: AppColors.secondary, width: 1),
           ),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );

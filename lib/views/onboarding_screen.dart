@@ -103,11 +103,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           Row(
             children: [
               Expanded(
-                child: _buildTextField(AppStrings.firstName, _firstNameController),
+                child: _buildTextField(
+                  AppStrings.firstName,
+                  _firstNameController,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: _buildTextField(AppStrings.lastName, _lastNameController),
+                child: _buildTextField(
+                  AppStrings.lastName,
+                  _lastNameController,
+                ),
               ),
             ],
           ),
@@ -126,10 +132,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             isPassword: true,
           ),
           const SizedBox(height: 48),
-          JollyButton(
-            text: AppStrings.continueText,
-            onPressed: _nextPage,
-          ),
+          JollyButton(text: AppStrings.continueText, onPressed: _nextPage),
         ],
       ),
     );
@@ -468,13 +471,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           const Text(
             AppStrings.subscribeMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, color: AppColors.textSecondary, height: 1.5),
+            style: TextStyle(
+              fontSize: 16,
+              color: AppColors.textSecondary,
+              height: 1.5,
+            ),
           ),
           const Spacer(),
-          JollyButton(
-            text: AppStrings.seePlans,
-            onPressed: _finishOnboarding,
-          ),
+          JollyButton(text: AppStrings.seePlans, onPressed: _finishOnboarding),
           const SizedBox(height: 16),
           const Text(
             AppStrings.termsVerify,
