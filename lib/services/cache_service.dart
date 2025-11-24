@@ -18,7 +18,7 @@ class CacheService {
       final jsonList = podcasts.map((p) => p.toJson()).toList();
       await prefs.setString(_podcastsKey, jsonEncode(jsonList));
     } catch (e) {
-      print('CacheService: Error saving podcasts: $e');
+      // Silently fail cache saves
     }
   }
 
@@ -31,7 +31,7 @@ class CacheService {
         return jsonList.map((json) => Podcast.fromJson(json)).toList();
       }
     } catch (e) {
-      print('CacheService: Error getting podcasts from cache: $e');
+      // Silently fail cache reads
     }
     return [];
   }
@@ -45,7 +45,7 @@ class CacheService {
         jsonEncode(jsonList),
       );
     } catch (e) {
-      print('CacheService: Error saving episodes: $e');
+      // Silently fail cache saves
     }
   }
 
@@ -58,7 +58,7 @@ class CacheService {
         return jsonList.map((json) => Episode.fromJson(json)).toList();
       }
     } catch (e) {
-      print('CacheService: Error getting episodes from cache: $e');
+      // Silently fail cache reads
     }
     return [];
   }

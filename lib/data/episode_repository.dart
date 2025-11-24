@@ -26,11 +26,9 @@ class EpisodeRepository {
       }
       return episodes;
     } catch (e) {
-      print('EpisodeRepository: Error fetching episodes: $e');
       // Fallback to cache
       final cachedEpisodes = await _cacheService.getEpisodes(podcastId);
       if (cachedEpisodes.isNotEmpty) {
-        print('EpisodeRepository: Returning cached episodes');
         return cachedEpisodes;
       }
       rethrow;
