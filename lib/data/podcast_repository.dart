@@ -26,11 +26,9 @@ class PodcastRepository {
       }
       return podcasts;
     } catch (e) {
-      print('PodcastRepository: Error fetching podcasts: $e');
       // Fallback to cache
       final cachedPodcasts = await _cacheService.getPodcasts();
       if (cachedPodcasts.isNotEmpty) {
-        print('PodcastRepository: Returning cached podcasts');
         return cachedPodcasts;
       }
       rethrow;

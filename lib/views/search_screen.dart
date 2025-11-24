@@ -59,7 +59,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                         hintText: 'Search podcasts...',
                         hintStyle: const TextStyle(color: Colors.white54),
                         filled: true,
-                        fillColor: Colors.white.withOpacity(0.1),
+                        fillColor: Colors.white.withAlpha(25),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,

@@ -4,7 +4,6 @@ import '../viewmodels/player_viewmodel.dart';
 import '../viewmodels/user_preferences_viewmodel.dart';
 import '../models/podcast_model.dart';
 import '../models/episode_model.dart';
-import '../widgets/animated_music_bars.dart';
 
 class PlayerScreen extends ConsumerStatefulWidget {
   final Episode episode;
@@ -112,7 +111,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withAlpha(51),
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
@@ -122,7 +121,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withAlpha(51),
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
@@ -150,7 +149,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.4),
+                              color: Colors.black.withAlpha(102),
                               blurRadius: 30,
                               offset: const Offset(0, 15),
                               spreadRadius: -5,
@@ -165,7 +164,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) =>
                                       Container(
-                                        color: Colors.white.withOpacity(0.2),
+                                        color: Colors.white.withAlpha(51),
                                         child: const Icon(
                                           Icons.podcasts,
                                           size: 100,
@@ -174,7 +173,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
                                       ),
                                 )
                               : Container(
-                                  color: Colors.white.withOpacity(0.2),
+                                  color: Colors.white.withAlpha(51),
                                   child: const Icon(
                                     Icons.podcasts,
                                     size: 100,
@@ -212,7 +211,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
                       currentEpisode.description,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withAlpha(230),
                       ),
                       textAlign: TextAlign.center,
                       maxLines: 2,
@@ -226,9 +225,9 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
                         SliderTheme(
                           data: SliderTheme.of(context).copyWith(
                             activeTrackColor: Colors.white,
-                            inactiveTrackColor: Colors.white.withOpacity(0.3),
+                            inactiveTrackColor: Colors.white.withAlpha(76),
                             thumbColor: Colors.white,
-                            overlayColor: Colors.white.withOpacity(0.2),
+                            overlayColor: Colors.white.withAlpha(51),
                             thumbShape: const RoundSliderThumbShape(
                               enabledThumbRadius: 8,
                             ),
@@ -313,7 +312,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
+                                color: Colors.black.withAlpha(51),
                                 blurRadius: 15,
                                 offset: const Offset(0, 5),
                               ),
@@ -458,9 +457,9 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withAlpha(51),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withOpacity(0.3)),
+          border: Border.all(color: Colors.white.withAlpha(76)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

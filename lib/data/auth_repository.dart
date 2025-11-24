@@ -33,15 +33,11 @@ class AuthRepository {
       try {
         final user = User.fromJson(jsonDecode(userStr));
         if (user.token.isEmpty) {
-          print(
-            'AuthRepository: Found user but token is empty. Clearing data.',
-          );
           await prefs.remove(_userKey);
           return null;
         }
         return user;
       } catch (e) {
-        print('AuthRepository: Error parsing user data: $e');
         await prefs.remove(_userKey);
         return null;
       }

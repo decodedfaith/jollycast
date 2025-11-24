@@ -14,12 +14,8 @@ class PodcastService {
   PodcastService(this._dio);
 
   Future<List<Podcast>> fetchPodcasts() async {
-    print('PodcastService: Fetching podcasts');
-
     try {
       final response = await _dio.get('/api/podcasts/top-jolly');
-
-      print('PodcastService: Response status: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final dynamic rootData = response.data;
@@ -37,26 +33,15 @@ class PodcastService {
           }
         }
 
-        print(
-          'PodcastService: Could not find podcast list in response: $rootData',
-        );
         return [];
       } else if (response.statusCode == 401) {
-        print('PodcastService: Unauthorized (401). Token might be invalid.');
         throw Exception('401 User not authenticated');
       } else {
-        print(
-          'PodcastService: Failed with status ${response.statusCode}: ${response.statusMessage}',
-        );
         throw Exception('Failed to fetch podcasts: ${response.statusMessage}');
       }
     } on DioException catch (e) {
-      print('PodcastService: DioException: ${e.message}');
-      print('PodcastService: DioException response: ${e.response}');
-      print('PodcastService: DioException request: ${e.requestOptions.uri}');
       throw Exception('Failed to fetch podcasts: ${e.message}');
     } catch (e) {
-      print('PodcastService: Unexpected error: $e');
       throw Exception('An unexpected error occurred: $e');
     }
   }

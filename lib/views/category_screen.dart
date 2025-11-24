@@ -28,7 +28,7 @@ class CategoryScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final podcast = podcasts[index];
           return Card(
-            color: Colors.white.withOpacity(0.05),
+            color: Colors.white.withAlpha(13),
             margin: const EdgeInsets.only(bottom: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

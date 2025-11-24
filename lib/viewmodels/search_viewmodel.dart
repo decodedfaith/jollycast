@@ -208,9 +208,9 @@ class CategoryViewModel extends Notifier<CategoryState> {
       podcasts = state.categorizedPodcasts[state.selectedCategory] ?? [];
     } else {
       // All podcasts
-      state.categorizedPodcasts.values.forEach((list) {
+      for (final list in state.categorizedPodcasts.values) {
         podcasts.addAll(list);
-      });
+      }
     }
 
     // Apply search filter if provided

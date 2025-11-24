@@ -20,34 +20,24 @@ class EpisodeService {
       '/api/episodes?podcast_id=$podcastId',
       '/api/podcasts/$podcastId', // Might return podcast with episodes
     ];
-
-    print('EpisodeService: Fetching episodes for podcast $podcastId');
-
     for (var url in endpoints) {
       try {
-        print('EpisodeService: Trying endpoint: $url');
-
         final response = await _dio.get(url);
-
-        print('EpisodeService: Response status: ${response.statusCode}');
 
         if (response.statusCode == 200) {
           return _parseEpisodesFromResponse(response.data, podcastId);
         }
       } on DioException catch (e) {
-        print('EpisodeService: Endpoint $url failed: ${e.message}');
         if (e.response?.statusCode == 404) {
           continue; // Try next endpoint
         }
         // For other errors, continue trying
         continue;
       } catch (e) {
-        print('EpisodeService: Unexpected error with $url: $e');
         continue;
       }
     }
 
-    print('EpisodeService: All endpoints failed, returning empty list');
     return [];
   }
 
@@ -94,7 +84,6 @@ class EpisodeService {
       }
 
       if (episodesList is List) {
-        print('EpisodeService: Found ${episodesList.length} episodes');
         return episodesList
             .map((json) {
               if (json is Map<String, dynamic>) {
@@ -111,10 +100,8 @@ class EpisodeService {
             .toList();
       }
 
-      print('EpisodeService: Could not parse episodes from response');
       return [];
     } catch (e) {
-      print('EpisodeService: Error parsing episodes: $e');
       return [];
     }
   }

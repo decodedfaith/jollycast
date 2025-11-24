@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'podcast_list_screen.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_strings.dart';
+import '../core/constants/app_assets.dart';
+import '../widgets/common/jolly_button.dart';
+import '../widgets/common/jolly_text_field.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -49,15 +54,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF003334), // Dark Green Background
+      backgroundColor: AppColors.background,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF00A86B), // Lighter Green top
-              Color(0xFF003334), // Dark Green bottom
+              AppColors.accent, // Lighter Green top
+              AppColors.background, // Dark Green bottom
             ],
           ),
         ),
@@ -84,61 +89,50 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(child: Image.asset('assets/icons/Jolly2.png', height: 60)),
+          Center(child: Image.asset(AppAssets.logo, height: 60)),
           const SizedBox(height: 32),
           const Text(
-            'Complete account setup',
+            AppStrings.completeAccountSetup,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 24),
           Row(
             children: [
               Expanded(
-                child: _buildTextField('First name', _firstNameController),
+                child: _buildTextField(
+                  AppStrings.firstName,
+                  _firstNameController,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: _buildTextField('Last name', _lastNameController),
+                child: _buildTextField(
+                  AppStrings.lastName,
+                  _lastNameController,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 16),
           _buildTextField(
-            'Phone number',
+            AppStrings.phoneNumber,
             _phoneController,
             prefixIcon: Icons.flag,
           ),
           const SizedBox(height: 16),
-          _buildTextField('Email address', _emailController),
+          _buildTextField(AppStrings.emailAddress, _emailController),
           const SizedBox(height: 16),
           _buildTextField(
-            'Create password',
+            AppStrings.createPassword,
             _passwordController,
             isPassword: true,
           ),
           const SizedBox(height: 48),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _nextPage,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF003334),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: const Text(
-                'Continue',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
+          JollyButton(text: AppStrings.continueText, onPressed: _nextPage),
         ],
       ),
     );
@@ -155,30 +149,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(color: Colors.white70, fontSize: 14),
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: Colors.white24),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: TextField(
-            controller: controller,
-            obscureText: isPassword,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              icon: prefixIcon != null
-                  ? Icon(prefixIcon, color: Colors.white70)
-                  : null,
-              suffixIcon: isPassword
-                  ? const Icon(Icons.visibility_outlined, color: Colors.white70)
-                  : null,
-            ),
-          ),
+        JollyTextField(
+          controller: controller,
+          hintText: '',
+          isPassword: isPassword,
+          prefixIcon: prefixIcon,
         ),
       ],
     );
@@ -209,23 +187,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Column(
       children: [
         const SizedBox(height: 24),
-        const Icon(Icons.headphones, size: 80, color: Colors.white),
+        const Icon(Icons.headphones, size: 80, color: AppColors.textPrimary),
         const SizedBox(height: 16),
         const Text(
-          'Welcome, Devon',
+          '${AppStrings.welcome}Devon',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(height: 8),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.0),
           child: Text(
-            'Personalize your Jolly experience by selecting your top interest and favorite topics.',
+            AppStrings.selectInterests,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
           ),
         ),
         const SizedBox(height: 24),
@@ -269,23 +247,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ),
         Padding(
           padding: const EdgeInsets.all(24.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _nextPage,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF003334),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: const Text(
-                'Continue',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
+          child: JollyButton(
+            text: AppStrings.continueText,
+            onPressed: _nextPage,
           ),
         ),
       ],
@@ -296,17 +260,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Column(
       children: [
         const SizedBox(height: 24),
-        const Icon(Icons.headphones, size: 80, color: Colors.white),
+        const Icon(Icons.headphones, size: 80, color: AppColors.textPrimary),
         const SizedBox(height: 24),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.0),
           child: Text(
-            'Select an avatar to represent your funk',
+            AppStrings.selectAvatar,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
         ),
@@ -334,13 +298,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     border: isSelected
                         ? Border.all(color: Colors.white, width: 3)
                         : null,
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withAlpha(51),
                   ),
                   child: Center(
                     child: Icon(
                       Icons.person,
                       size: 40,
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withAlpha(204),
                     ),
                   ),
                 ),
@@ -350,23 +314,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ),
         Padding(
           padding: const EdgeInsets.all(24.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _nextPage,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF003334),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: const Text(
-                'Continue',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
+          child: JollyButton(
+            text: AppStrings.continueText,
+            onPressed: _nextPage,
           ),
         ),
       ],
@@ -379,28 +329,28 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       child: Column(
         children: [
           const SizedBox(height: 24),
-          Center(child: Image.asset('assets/icons/Jolly2.png', height: 40)),
+          Center(child: Image.asset(AppAssets.logo, height: 40)),
           const SizedBox(height: 24),
           const Text(
-            'Enjoy unlimited podcasts',
-            style: TextStyle(fontSize: 20, color: Colors.white),
+            AppStrings.enjoyUnlimited,
+            style: TextStyle(fontSize: 20, color: AppColors.textPrimary),
           ),
           const SizedBox(height: 24),
-          _buildPlanCard('Daily Jolly Plan', '100', const Color(0xFF00A86B)),
+          _buildPlanCard(AppStrings.dailyPlan, '100', AppColors.accent),
           const SizedBox(height: 16),
-          _buildPlanCard('Weekly Jolly Plan', '200', const Color(0xFF00A86B)),
+          _buildPlanCard(AppStrings.weeklyPlan, '200', AppColors.accent),
           const SizedBox(height: 16),
-          _buildPlanCard('Monthly Jolly Plan', '500', const Color(0xFF00A86B)),
+          _buildPlanCard(AppStrings.monthlyPlan, '500', AppColors.accent),
           const SizedBox(height: 24),
           TextButton(
             onPressed: _nextPage, // Navigate to All Set page
             child: const Text(
-              'Skip for now',
+              AppStrings.skipForNow,
               style: TextStyle(
-                color: Colors.white70,
+                color: AppColors.textSecondary,
                 fontSize: 16,
                 decoration: TextDecoration.underline,
-                decorationColor: Colors.white70,
+                decorationColor: AppColors.textSecondary,
               ),
             ),
           ),
@@ -414,7 +364,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color.withOpacity(0.8), color.withOpacity(0.6)],
+          colors: [color.withAlpha(204), color.withAlpha(153)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -423,14 +373,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.headphones, color: Colors.white),
+          const Icon(Icons.headphones, color: AppColors.textPrimary),
           const SizedBox(height: 12),
           Text(
             title,
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 8),
@@ -444,8 +394,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Enjoy unlimited podcast for 24 hours.\nYou can cancel at anytime.',
-            style: TextStyle(color: Colors.white70, fontSize: 12),
+            AppStrings.planDescription,
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
           ),
           const SizedBox(height: 16),
           Row(
@@ -460,7 +410,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text('One-time'),
+                  child: const Text(AppStrings.oneTime),
                 ),
               ),
               const SizedBox(width: 12),
@@ -474,7 +424,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text('Auto-renewal'),
+                  child: const Text(AppStrings.autoRenewal),
                 ),
               ),
             ],
@@ -491,7 +441,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
-          Image.asset('assets/icons/Jolly2.png', height: 40),
+          Image.asset(AppAssets.logo, height: 40),
           const SizedBox(height: 40),
           Container(
             padding: const EdgeInsets.all(4),
@@ -502,56 +452,38 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             child: const CircleAvatar(
               radius: 40,
               backgroundImage: AssetImage(
-                'assets/icons/Jolly2.png',
+                AppAssets.logo,
               ), // Placeholder for user avatar
               // In real app, use the selected avatar
             ),
           ),
           const SizedBox(height: 24),
           const Text(
-            "You're all set Devon!",
+            "${AppStrings.allSet}Devon!",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
           const Text(
-            'Subscribe to a plan to enjoy Jolly Premium.\nGet access to all audio contents, personalize your library to your style and do more cool jolly stuff.',
+            AppStrings.subscribeMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.5),
+            style: TextStyle(
+              fontSize: 16,
+              color: AppColors.textSecondary,
+              height: 1.5,
+            ),
           ),
           const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _finishOnboarding, // Go to Home
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF003334),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: const Text(
-                'See plans', // Or 'Continue' based on flow. Design says 'See plans' but user said 'You are all set' is next.
-                // If they skipped, maybe this button takes them back to plans?
-                // But for now, let's make it go to Home as "Continue" to finish the flow.
-                // The user prompt said: "skip button also to move to the next page which is the you are all set page".
-                // So this is the final page.
-                // I'll label it "Continue" to be safe for entering the app, or "See plans" if it's an upsell.
-                // Let's use "Continue" to actually enter the app.
-              ),
-            ),
-          ),
+          JollyButton(text: AppStrings.seePlans, onPressed: _finishOnboarding),
           const SizedBox(height: 16),
           const Text(
-            'By continuing, you verify that you are at least 18 years old, and you agree with our Terms and Refund policy.',
+            AppStrings.termsVerify,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white54, fontSize: 12),
+            style: TextStyle(color: AppColors.textTertiary, fontSize: 12),
           ),
           const SizedBox(height: 24),
         ],

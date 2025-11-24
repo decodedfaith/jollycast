@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -20,7 +19,6 @@ class EpisodeListScreen extends ConsumerStatefulWidget {
 class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  double _scrollOffset = 0.0;
   bool _showFullDescription = false;
   int _visibleEpisodes = 5;
 
@@ -39,7 +37,7 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
 
   void _onScroll() {
     setState(() {
-      _scrollOffset = _scrollController.offset;
+      // Track scroll for future use
     });
   }
 
@@ -113,7 +111,7 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
                 leading: Container(
                   margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withAlpha(76),
                     shape: BoxShape.circle,
                   ),
                   child: BackButton(
@@ -143,7 +141,7 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
                             end: Alignment.bottomCenter,
                             colors: [
                               Colors.transparent,
-                              Colors.black.withOpacity(0.7),
+                              Colors.black.withAlpha(178),
                               const Color(0xFF003334),
                             ],
                             stops: const [0.0, 0.6, 1.0],
@@ -230,27 +228,30 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
                         ],
                       ),
                       const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildActionIconButton(
-                            icon: Icons.playlist_add,
-                            label: 'Add to queue',
-                            onTap: () {},
-                          ),
-                          const SizedBox(width: 12),
-                          _buildActionIconButton(
-                            icon: Icons.share,
-                            label: 'Share episode',
-                            onTap: () {},
-                          ),
-                          const SizedBox(width: 12),
-                          _buildActionIconButton(
-                            icon: Icons.playlist_play,
-                            label: 'Add to playlist',
-                            onTap: () {},
-                          ),
-                        ],
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildActionIconButton(
+                              icon: Icons.playlist_add,
+                              label: 'Add to queue',
+                              onTap: () {},
+                            ),
+                            const SizedBox(width: 12),
+                            _buildActionIconButton(
+                              icon: Icons.share,
+                              label: 'Share episode',
+                              onTap: () {},
+                            ),
+                            const SizedBox(width: 12),
+                            _buildActionIconButton(
+                              icon: Icons.playlist_play,
+                              label: 'Add to playlist',
+                              onTap: () {},
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -470,7 +471,7 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withAlpha(25),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white24),
       ),
@@ -510,9 +511,9 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withAlpha(13),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          border: Border.all(color: Colors.white.withAlpha(25)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -553,7 +554,7 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
                   Text(
                     episode.description,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.white.withAlpha(178),
                       fontSize: 12,
                     ),
                     maxLines: 2,

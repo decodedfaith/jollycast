@@ -16,7 +16,6 @@ class Podcast {
   });
 
   factory Podcast.fromJson(Map<String, dynamic> json) {
-    print('Podcast JSON keys: ${json.keys.toList()}'); // Debugging
     return Podcast(
       id: json['id']?.toString() ?? '',
       title: json['title'] ?? 'Unknown Title',

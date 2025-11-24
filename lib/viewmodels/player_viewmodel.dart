@@ -132,7 +132,7 @@ class PlayerViewModel extends Notifier<PlayerState> {
         await _audioPlayer.setUrl(podcast.audioUrl);
         _audioPlayer.play();
       } catch (e) {
-        print("PlayerViewModel: Error playing podcast: $e");
+        // Silently handle errors
       }
     } else {
       togglePlayPause();
@@ -183,27 +183,22 @@ class PlayerViewModel extends Notifier<PlayerState> {
     try {
       state = state.copyWith(queue: episodes, currentIndex: initialIndex);
 
-      final children = episodes.map((e) {
+      final audioSources = episodes.map((e) {
         return AudioSource.uri(
           Uri.parse(e.audioUrl),
           tag: e, // Store episode metadata
         );
       }).toList();
 
-      final playlist = ConcatenatingAudioSource(
-        children: children,
-        useLazyPreparation: true, // Prefetching optimization
-        shuffleOrder: DefaultShuffleOrder(),
-      );
-
-      await _audioPlayer.setAudioSource(
-        playlist,
+      // Use setAudioSources instead of deprecated ConcatenatingAudioSource
+      await _audioPlayer.setAudioSources(
+        audioSources,
         initialIndex: initialIndex,
         initialPosition: Duration.zero,
       );
       _audioPlayer.play();
     } catch (e) {
-      print("PlayerViewModel: Error playing playlist: $e");
+      // Silently handle errors
     }
   }
 

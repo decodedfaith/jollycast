@@ -18,15 +18,6 @@ final dioProvider = Provider<Dio>((ref) {
 
   dio.interceptors.add(AuthInterceptor());
 
-  // Add LogInterceptor for debugging
-  dio.interceptors.add(
-    LogInterceptor(
-      requestBody: true,
-      responseBody: true,
-      logPrint: (obj) => print('DioLog: $obj'),
-    ),
-  );
-
   return dio;
 });
 
@@ -53,11 +44,10 @@ class AuthInterceptor extends Interceptor {
 
         if (token != null && token.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $token';
-          print('AuthInterceptor: Added token to request: ${options.uri}');
         }
       }
     } catch (e) {
-      print('AuthInterceptor: Error getting token: $e');
+      // Silently handle errors
     }
 
     return handler.next(options);
@@ -66,13 +56,12 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      print('AuthInterceptor: 401 Unauthorized detected. Clearing session.');
       // Clear the stored user data
       try {
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove(_userKey);
       } catch (e) {
-        print('AuthInterceptor: Error clearing session: $e');
+        // Silently handle errors
       }
     }
     return handler.next(err);

@@ -84,7 +84,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                   hintText: 'Search categories or podcasts',
                   hintStyle: const TextStyle(color: Colors.white54),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
+                  fillColor: Colors.white.withAlpha(25),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -170,7 +170,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
             const Icon(Icons.search_off, color: Colors.white54, size: 64),
             const SizedBox(height: 16),
             Text(
-              'No categories found for "${_searchQuery}"',
+              'No categories found for "$_searchQuery"',
               style: const TextStyle(color: Colors.white70, fontSize: 16),
             ),
             const SizedBox(height: 8),
@@ -244,10 +244,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.7),
-                      ],
+                      colors: [Colors.transparent, Colors.black.withAlpha(178)],
                     ),
                   ),
                 ),
