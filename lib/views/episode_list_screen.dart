@@ -228,27 +228,30 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
                         ],
                       ),
                       const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildActionIconButton(
-                            icon: Icons.playlist_add,
-                            label: 'Add to queue',
-                            onTap: () {},
-                          ),
-                          const SizedBox(width: 12),
-                          _buildActionIconButton(
-                            icon: Icons.share,
-                            label: 'Share episode',
-                            onTap: () {},
-                          ),
-                          const SizedBox(width: 12),
-                          _buildActionIconButton(
-                            icon: Icons.playlist_play,
-                            label: 'Add to playlist',
-                            onTap: () {},
-                          ),
-                        ],
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildActionIconButton(
+                              icon: Icons.playlist_add,
+                              label: 'Add to queue',
+                              onTap: () {},
+                            ),
+                            const SizedBox(width: 12),
+                            _buildActionIconButton(
+                              icon: Icons.share,
+                              label: 'Share episode',
+                              onTap: () {},
+                            ),
+                            const SizedBox(width: 12),
+                            _buildActionIconButton(
+                              icon: Icons.playlist_play,
+                              label: 'Add to playlist',
+                              onTap: () {},
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
