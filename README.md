@@ -5,6 +5,7 @@ A simplified podcast streaming application built with Flutter for the Bloocode T
 ## 📱 About
 
 Jollycast is a modern, feature-rich podcast streaming application that allows users to discover, listen to, and manage their favorite podcasts. It is built with a focus on clean architecture, state management, and pixel-perfect UI implementation.
+![Demo of Jollycast App](assets/mp4/demo.gif)
 
 ## 🛠️ Tech Stack & State Management
 

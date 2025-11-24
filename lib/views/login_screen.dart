@@ -3,6 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import 'onboarding_screen.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_strings.dart';
+import '../core/constants/app_assets.dart';
+import '../widgets/common/jolly_button.dart';
+import '../widgets/common/jolly_text_field.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -27,7 +32,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _initializeVideo() async {
-    _videoController = VideoPlayerController.asset('assets/mp4/loginbg.mp4');
+    _videoController = VideoPlayerController.asset(AppAssets.loginBgVideo);
     await _videoController.initialize();
     _videoController.setLooping(true);
     _videoController.play();
@@ -99,7 +104,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             )
           else
             Image.asset(
-              'assets/loginbg1.png',
+              AppAssets.loginBgImage,
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
@@ -127,85 +132,50 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
-          Image.asset('assets/icons/Jolly2.png', height: 80),
+          Image.asset(AppAssets.logo, height: 80),
           const SizedBox(height: 24),
           const Text(
-            'PODCASTS FOR\nAFRICA, BY AFRICANS',
+            AppStrings.loginTitle,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.textPrimary,
               height: 1.2,
             ),
           ),
           const SizedBox(height: 90),
           // const Spacer(),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.flag,
-                  color: Colors.green,
-                ), // Placeholder for flag
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    controller: _phoneController,
-                    keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your phone number',
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          JollyTextField(
+            controller: _phoneController,
+            hintText: AppStrings.enterPhoneNumber,
+            keyboardType: TextInputType.phone,
+            prefixIcon: Icons.flag,
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _handlePhoneSubmit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF003334),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  side: const BorderSide(color: Color(0xFFA3CB43), width: 1),
-                ),
-              ),
-              child: const Text(
-                'Continue',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
+          JollyButton(
+            text: AppStrings.continueText,
+            onPressed: _handlePhoneSubmit,
           ),
+          const SizedBox(height: 16),
           const Text(
-            'By proceeding, you agree to our T&C',
+            AppStrings.agreeToTerms,
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.normal,
-              // decoration: TextDecoration.underline,
-              decorationColor: Colors.white,
+              decorationColor: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
           TextButton(
             onPressed: () {},
             child: const Text(
-              'BECOME A PODCAST CREATOR',
+              AppStrings.becomeCreator,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline,
-                decorationColor: Colors.white,
+                decorationColor: AppColors.textPrimary,
               ),
             ),
           ),
@@ -222,44 +192,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
-          Image.asset('assets/icons/Jolly2.png', height: 60),
+          Image.asset(AppAssets.logo, height: 60),
           const SizedBox(height: 24),
           Text(
             _usePassword
-                ? 'Enter your password for\n${_phoneController.text}'
-                : 'Enter the 6 digit code sent to your\nphone number ${_phoneController.text}',
+                ? '${AppStrings.enterPasswordFor}${_phoneController.text}'
+                : '${AppStrings.enterCodeSentTo}${_phoneController.text}',
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
-              color: Colors.white,
+              color: AppColors.textPrimary,
               height: 1.5,
             ),
           ),
           const Spacer(),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            child: TextField(
-              controller: _otpController,
-              keyboardType: _usePassword
-                  ? TextInputType.text
-                  : TextInputType.number,
-              obscureText: _usePassword,
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                hintText: _usePassword ? 'Enter Password' : 'Enter code',
-                border: InputBorder.none,
-              ),
-            ),
+          JollyTextField(
+            controller: _otpController,
+            hintText: _usePassword ? AppStrings.enterPassword : AppStrings.enterCode,
+            keyboardType: _usePassword
+                ? TextInputType.text
+                : TextInputType.number,
+            isPassword: _usePassword,
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Use Password', style: TextStyle(color: Colors.white)),
+              const Text(AppStrings.usePassword, style: TextStyle(color: AppColors.textPrimary)),
               Switch(
                 value: _usePassword,
                 onChanged: (value) {
@@ -268,41 +228,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     _otpController.clear();
                   });
                 },
-                activeColor: const Color(0xFFA3CB43),
+                activeColor: AppColors.secondary,
               ),
             ],
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: isLoading ? null : _handleOtpSubmit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF003334),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  side: const BorderSide(color: Color(0xFFA3CB43), width: 1),
-                ),
-              ),
-              child: isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : const Text(
-                      'Continue',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-            ),
+          JollyButton(
+            text: AppStrings.continueText,
+            onPressed: isLoading ? null : _handleOtpSubmit,
+            isLoading: isLoading,
           ),
           const SizedBox(height: 80),
         ],
