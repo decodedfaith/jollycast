@@ -990,18 +990,16 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
           .read(userPreferencesViewModelProvider.notifier)
           .addToRecentlyPlayed(episode.id, podcast.id);
 
+      // Store episode data before navigating
       setState(() {
         _currentEpisode = episode;
         _currentPodcast = podcast;
         _allEpisodes = episodes;
-        _miniPlayerVisible = true;
       });
 
-      // Show mini player
-
-      // Navigate to full player
+      // Navigate to full player and show mini player when user returns
       if (context.mounted) {
-        Navigator.of(context).push(
+        await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => PlayerScreen(
               episode: episode,
@@ -1011,6 +1009,13 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
             ),
           ),
         );
+
+        // Show mini player after returning from full player
+        if (mounted) {
+          setState(() {
+            _miniPlayerVisible = true;
+          });
+        }
       }
     } catch (e) {
       if (context.mounted) {
