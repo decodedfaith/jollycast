@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../viewmodels/auth_viewmodel.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'dart:math' as math;
 import 'login_screen.dart';
 import 'podcast_list_screen.dart';
+import '../viewmodels/auth_viewmodel.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_assets.dart';
+import '../core/constants/app_strings.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -52,28 +55,25 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     )..repeat(reverse: true);
 
     _entranceController.forward();
-    _initApp();
+    _checkAuthAndNavigate();
   }
 
-  Future<void> _initApp() async {
+  Future<void> _checkAuthAndNavigate() async {
     // Wait for animations and minimum splash time
     await Future.delayed(const Duration(seconds: 4));
 
     if (!mounted) return;
 
-    // Check authentication status
-    final user = await ref.read(authViewModelProvider.future);
+    final authState = ref.read(authViewModelProvider);
 
-    if (!mounted) return;
-
-    if (user != null) {
+    if (authState.value != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const PodcastListScreen()),
       );
     } else {
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
     }
   }
 
@@ -87,7 +87,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF4CD964),
+      backgroundColor: AppColors.splashBackground,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -102,6 +102,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   entranceValue: _stripeSlide.value,
                   circleScale: _circleScale.value,
                   pulseValue: _pulseController.value,
+                  color: AppColors.primary,
                 ),
                 size: Size.infinite,
               );
@@ -114,8 +115,23 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset("assets/icons/jollyIcon.png"),
-                  SizedBox(height: 340),
+                  Image.asset(
+                    AppAssets.logoIcon,
+                    // height: 80,
+                    // width: 80,
+                    color: AppColors.primary,
+                  ),
+                  const SizedBox(height: 16),
+                  // Text(
+                  //   AppStrings.appName.toUpperCase(),
+                  //   style: GoogleFonts.dmSans(
+                  //     fontSize: 42,
+                  //     fontWeight: FontWeight.w900,
+                  //     color: AppColors.primary,
+                  //     letterSpacing: 1.2,
+                  //   ),
+                  // ),
+                  const SizedBox(height: 340), // Spacing from original design
                   const SizedBox(height: 20),
                   SizedBox(
                     width: 24,
@@ -123,7 +139,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        const Color(0xFF003334).withOpacity(0.6),
+                        AppColors.primary.withValues(alpha: 0.6),
                       ),
                     ),
                   ),
@@ -141,11 +157,13 @@ class SplashBackgroundPainter extends CustomPainter {
   final double entranceValue;
   final double circleScale;
   final double pulseValue;
+  final Color color;
 
   SplashBackgroundPainter({
     this.entranceValue = 1.0,
     this.circleScale = 1.0,
     this.pulseValue = 0.0,
+    required this.color,
   });
 
   @override
@@ -153,13 +171,11 @@ class SplashBackgroundPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    final Color bgLime = const Color(0xFF32D74B);
-    final Color darkTeal = const Color(0xFF002323);
-
-    canvas.drawRect(Offset.zero & size, Paint()..color = bgLime);
+    // Draw background (optional if Scaffold has it, but good for completeness)
+    canvas.drawRect(Offset.zero & size, Paint()..color = AppColors.splashBackground);
 
     final shapePaint = Paint()
-      ..color = darkTeal
+      ..color = color
       ..style = PaintingStyle.fill
       ..isAntiAlias = true;
 

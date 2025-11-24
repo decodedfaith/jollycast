@@ -8,32 +8,73 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('Full App Flow Integration Tests', () {
-    testWidgets('Login Flow Test', (WidgetTester tester) async {
+    testWidgets('Login and Onboarding Flow Test', (WidgetTester tester) async {
       // Initialize app
       SharedPreferences.setMockInitialValues({});
       app.main();
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
       // Wait for splash screen to finish
-      await tester.pumpAndSettle(const Duration(seconds: 3));
-
-      // Find and enter email
-      final emailField = find.byType(TextField).first;
-      await tester.enterText(emailField, 'test@example.com');
-      await tester.pumpAndSettle();
-
-      // Find and enter password
-      final passwordField = find.byType(TextField).last;
-      await tester.enterText(passwordField, 'password123');
-      await tester.pumpAndSettle();
-
-      // Tap Sign In button
-      final signInButton = find.text('Sign In');
-      await tester.tap(signInButton);
       await tester.pumpAndSettle(const Duration(seconds: 5));
 
-      // Verify we're on the main screen (should show "Jolly" logo or tabs)
-      // This would pass if login is successful
+      // --- LOGIN SCREEN ---
+      // Step 1: Phone Number
+      final phoneField = find.byType(TextField).first;
+      await tester.enterText(phoneField, '08114227399');
+      await tester.pumpAndSettle();
+
+      // Tap Continue (Phone)
+      await tester.tap(find.text('Continue').first);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Step 2: OTP
+      final otpField = find.byType(TextField).last;
+      await tester.enterText(otpField, '123456'); // Mock OTP
+      await tester.pumpAndSettle();
+
+      // Tap Continue (OTP)
+      await tester.tap(find.text('Continue').last);
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // --- ONBOARDING SCREEN ---
+      // Verify we are on Onboarding (Account Setup)
+      expect(find.text('Complete account setup'), findsOneWidget);
+
+      // Step 1: Account Setup
+      await tester.enterText(find.widgetWithText(TextField, 'First name'), 'Test');
+      await tester.enterText(find.widgetWithText(TextField, 'Last name'), 'User');
+      await tester.enterText(find.widgetWithText(TextField, 'Email address'), 'test@example.com');
+      await tester.enterText(find.widgetWithText(TextField, 'Create password'), 'password');
+      await tester.pumpAndSettle();
+      
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Step 2: Interests
+      expect(find.text('Welcome, Devon'), findsOneWidget);
+      await tester.tap(find.text('Technology').first); // Select an interest if available, or just continue
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Step 3: Avatar
+      expect(find.text('Select an avatar to represent your funk'), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.person).first); // Select first avatar
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Step 4: Subscription
+      expect(find.text('Enjoy unlimited podcasts'), findsOneWidget);
+      await tester.tap(find.text('Skip for now'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Step 5: All Set
+      expect(find.text("You're all set Devon!"), findsOneWidget);
+      await tester.tap(find.text('See plans')); // This button navigates to Home
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // --- HOME SCREEN ---
+      // Verify we're on the main screen (Podcast List)
+      expect(find.byType(app.PodcastListScreen), findsOneWidget);
     });
 
     testWidgets('Search Flow Test', (WidgetTester tester) async {

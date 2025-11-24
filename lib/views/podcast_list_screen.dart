@@ -13,6 +13,11 @@ import 'search_screen.dart';
 import 'tabs/categories_tab.dart';
 import 'tabs/library_tab.dart';
 import '../widgets/mini_player.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_strings.dart';
+import '../core/constants/app_assets.dart';
+import 'login_screen.dart';
+import '../viewmodels/auth_viewmodel.dart';
 
 class PodcastListScreen extends ConsumerStatefulWidget {
   const PodcastListScreen({super.key});
@@ -31,7 +36,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF003334),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Stack(
           children: [
@@ -68,22 +73,22 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
             _currentIndex = index;
           });
         },
-        backgroundColor: const Color(0xFF1E1E1E),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white54,
+        backgroundColor: AppColors.bottomNavBackground,
+        selectedItemColor: AppColors.textPrimary,
+        unselectedItemColor: AppColors.textTertiary,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.podcasts),
-            label: 'Discover',
+            label: AppStrings.discover,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.grid_view),
-            label: 'Categories',
+            label: AppStrings.categories,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Your Library',
+            label: AppStrings.library,
           ),
         ],
       ),
@@ -98,8 +103,8 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
         if (podcasts.isEmpty) {
           return const Center(
             child: Text(
-              'No podcasts found.',
-              style: TextStyle(color: Colors.white),
+              AppStrings.noPodcastsFound,
+              style: TextStyle(color: AppColors.textPrimary),
             ),
           );
         }
@@ -119,7 +124,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Jolly Logo
-                    Image.asset('assets/icons/Jolly2.png', height: 30),
+                    Image.asset(AppAssets.logo, height: 30),
                     // Profile, Notification, Search container
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -127,24 +132,73 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1E2929),
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Profile picture
-                          const CircleAvatar(
-                            radius: 14,
-                            backgroundImage: AssetImage(
-                              'assets/icons/Jolly2.png',
+                          // Profile picture with Logout Menu
+                          PopupMenuButton<String>(
+                            offset: const Offset(0, 40),
+                            color: AppColors.surface,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: const BorderSide(
+                                color: Colors.white24,
+                                width: 1,
+                              ),
                             ),
+                            child: const CircleAvatar(
+                              radius: 14,
+                              backgroundImage: AssetImage(
+                                AppAssets.logo,
+                              ),
+                            ),
+                            onSelected: (value) async {
+                              if (value == 'logout') {
+                                await ref
+                                    .read(authViewModelProvider.notifier)
+                                    .logout();
+                                if (context.mounted) {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (_) => const LoginScreen(),
+                                    ),
+                                    (route) => false,
+                                  );
+                                }
+                              }
+                            },
+                            itemBuilder:
+                                (context) => [
+                                  const PopupMenuItem<String>(
+                                    value: 'logout',
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.logout,
+                                          color: AppColors.error,
+                                          size: 20,
+                                        ),
+                                        SizedBox(width: 12),
+                                        Text(
+                                          AppStrings.logout,
+                                          style: TextStyle(
+                                            color: AppColors.textPrimary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                           ),
                           const SizedBox(width: 12),
                           // Notification icon
                           const Icon(
                             Icons.notifications,
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             size: 20,
                           ),
                           const SizedBox(width: 12),
@@ -159,7 +213,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                             },
                             child: const Icon(
                               Icons.search,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               size: 20,
                             ),
                           ),
@@ -180,11 +234,11 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                     Text('🔥', style: TextStyle(fontSize: 20)),
                     SizedBox(width: 8),
                     Text(
-                      'Hot & trending episodes',
+                      AppStrings.hotAndTrending,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ],
@@ -216,11 +270,11 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                     Icon(Icons.star, color: Colors.purpleAccent),
                     SizedBox(width: 8),
                     Text(
-                      "Editor's pick",
+                      AppStrings.editorsPick,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ],
@@ -244,11 +298,11 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'Newest episodes',
+                      AppStrings.newestEpisodes,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     GestureDetector(
@@ -264,12 +318,12 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white54),
+                          border: Border.all(color: AppColors.textTertiary),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Text(
-                          'Shuffle play',
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          AppStrings.shufflePlay,
+                          style: TextStyle(color: AppColors.textPrimary, fontSize: 12),
                         ),
                       ),
                     ),
@@ -301,9 +355,9 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: const Text(
-                      'See all',
+                      AppStrings.seeAll,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -317,11 +371,11 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: const Text(
-                  'Mixed by interest & categories',
+                  AppStrings.mixedByInterest,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -338,7 +392,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
       error: (error, stackTrace) => Center(
         child: Text(
           'Error: $error',
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: AppColors.textPrimary),
         ),
       ),
     );
