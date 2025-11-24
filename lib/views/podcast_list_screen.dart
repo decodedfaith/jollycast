@@ -351,7 +351,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                       vertical: 12,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withAlpha(25),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: const Text(
@@ -423,8 +423,8 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.6),
-                    Colors.black.withOpacity(0.9),
+                    Colors.black.withAlpha(153),
+                    Colors.black.withAlpha(230),
                   ],
                   stops: const [0.4, 0.7, 1.0],
                 ),
@@ -435,7 +435,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF00A86B).withOpacity(0.8),
+                  color: const Color(0xFF00A86B).withAlpha(204),
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 2),
                 ),
@@ -539,7 +539,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white38),
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withAlpha(25),
         ),
         child: Icon(icon, color: Colors.white, size: 20),
       ),
@@ -634,7 +634,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF00A86B).withOpacity(0.8),
+                    color: const Color(0xFF00A86B).withAlpha(204),
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 2),
                   ),
@@ -712,8 +712,8 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                               ),
                               decoration: BoxDecoration(
                                 color: isFollowing
-                                    ? const Color(0xFF00A86B).withOpacity(0.3)
-                                    : Colors.white.withOpacity(0.2),
+                                    ? const Color(0xFF00A86B).withAlpha(76)
+                                    : Colors.white.withAlpha(51),
                                 borderRadius: BorderRadius.circular(20),
                                 border: isFollowing
                                     ? Border.all(color: const Color(0xFF00A86B))
@@ -813,7 +813,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                 Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF00A86B).withOpacity(0.8),
+                    color: const Color(0xFF00A86B).withAlpha(204),
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 1),
                   ),

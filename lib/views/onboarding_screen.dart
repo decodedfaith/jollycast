@@ -295,13 +295,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     border: isSelected
                         ? Border.all(color: Colors.white, width: 3)
                         : null,
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withAlpha(51),
                   ),
                   child: Center(
                     child: Icon(
                       Icons.person,
                       size: 40,
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withAlpha(204),
                     ),
                   ),
                 ),
@@ -361,7 +361,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color.withOpacity(0.8), color.withOpacity(0.6)],
+          colors: [color.withAlpha(204), color.withAlpha(153)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

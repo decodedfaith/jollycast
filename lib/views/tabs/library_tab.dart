@@ -119,7 +119,7 @@ class LibraryTab extends ConsumerWidget {
                         : Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.05),
+                              color: Colors.white.withAlpha(13),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Column(
@@ -205,7 +205,7 @@ class LibraryTab extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withAlpha(13),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Center(

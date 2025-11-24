@@ -110,7 +110,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               height: double.infinity,
             ),
           // Overlay to darken video slightly
-          Container(color: Colors.black.withOpacity(0.4)),
+          Container(color: Colors.black.withAlpha(102)),
 
           // Content
           SafeArea(
@@ -208,7 +208,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           const Spacer(),
           JollyTextField(
             controller: _otpController,
-            hintText: _usePassword ? AppStrings.enterPassword : AppStrings.enterCode,
+            hintText: _usePassword
+                ? AppStrings.enterPassword
+                : AppStrings.enterCode,
             keyboardType: _usePassword
                 ? TextInputType.text
                 : TextInputType.number,
@@ -219,7 +221,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(AppStrings.usePassword, style: TextStyle(color: AppColors.textPrimary)),
+              const Text(
+                AppStrings.usePassword,
+                style: TextStyle(color: AppColors.textPrimary),
+              ),
               Switch(
                 value: _usePassword,
                 onChanged: (value) {
@@ -228,7 +233,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     _otpController.clear();
                   });
                 },
-                activeColor: AppColors.secondary,
+                activeThumbColor: AppColors.secondary,
               ),
             ],
           ),
