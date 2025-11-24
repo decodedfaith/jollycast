@@ -449,4 +449,4 @@ For support, email support@jollycast.com or open an issue on GitHub.
 
 ---
 
-**Built with ❤️ using Flutter**
+**Built with ❤️ by faith.dev(decodedfaith) using Flutter**
