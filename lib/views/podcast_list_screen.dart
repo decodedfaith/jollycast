@@ -151,16 +151,14 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                             ),
                             child: const CircleAvatar(
                               radius: 14,
-                              backgroundImage: AssetImage(
-                                AppAssets.logo,
-                              ),
+                              backgroundImage: AssetImage(AppAssets.logo),
                             ),
                             onSelected: (value) async {
                               if (value == 'logout') {
                                 await ref
                                     .read(authViewModelProvider.notifier)
                                     .logout();
-                                if (context.mounted) {
+                                if (mounted) {
                                   Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                       builder: (_) => const LoginScreen(),
@@ -170,29 +168,28 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                                 }
                               }
                             },
-                            itemBuilder:
-                                (context) => [
-                                  const PopupMenuItem<String>(
-                                    value: 'logout',
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.logout,
-                                          color: AppColors.error,
-                                          size: 20,
-                                        ),
-                                        SizedBox(width: 12),
-                                        Text(
-                                          AppStrings.logout,
-                                          style: TextStyle(
-                                            color: AppColors.textPrimary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
+                            itemBuilder: (context) => [
+                              const PopupMenuItem<String>(
+                                value: 'logout',
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.logout,
+                                      color: AppColors.error,
+                                      size: 20,
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(width: 12),
+                                    Text(
+                                      AppStrings.logout,
+                                      style: TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(width: 12),
                           // Notification icon
@@ -323,7 +320,10 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                         ),
                         child: const Text(
                           AppStrings.shufflePlay,
-                          style: TextStyle(color: AppColors.textPrimary, fontSize: 12),
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),
