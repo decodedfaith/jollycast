@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'dart:math' as math;
+
 import 'login_screen.dart';
 import 'podcast_list_screen.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_assets.dart';
-import '../core/constants/app_strings.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -71,9 +69,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         MaterialPageRoute(builder: (_) => const PodcastListScreen()),
       );
     } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
     }
   }
 
@@ -172,7 +170,10 @@ class SplashBackgroundPainter extends CustomPainter {
     final h = size.height;
 
     // Draw background (optional if Scaffold has it, but good for completeness)
-    canvas.drawRect(Offset.zero & size, Paint()..color = AppColors.splashBackground);
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()..color = AppColors.splashBackground,
+    );
 
     final shapePaint = Paint()
       ..color = color
