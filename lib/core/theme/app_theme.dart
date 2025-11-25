@@ -17,8 +17,6 @@ class AppTheme {
         onSecondary: Colors.black,
         onSurface: Colors.white,
       ),
-
-      // Text Theme (Google Fonts will be applied in main.dart or here if needed)
       textTheme: const TextTheme(
         headlineLarge: TextStyle(
           color: AppColors.textPrimary,
@@ -33,8 +31,6 @@ class AppTheme {
         bodyLarge: TextStyle(color: AppColors.textPrimary, fontSize: 16),
         bodyMedium: TextStyle(color: AppColors.textSecondary, fontSize: 14),
       ),
-
-      // Input Decoration
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
@@ -48,8 +44,63 @@ class AppTheme {
           vertical: 12,
         ),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+            side: const BorderSide(color: AppColors.secondary, width: 1),
+          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
 
-      // Elevated Button Theme
+  static ThemeData get lightTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      primaryColor: AppColors.primary,
+      scaffoldBackgroundColor: Colors.white,
+      colorScheme: const ColorScheme.light(
+        primary: AppColors.primary,
+        secondary: AppColors.secondary,
+        surface: Colors.white,
+        error: AppColors.error,
+        onPrimary: Colors.black,
+        onSecondary: Colors.black,
+        onSurface: Colors.black,
+      ),
+      textTheme: const TextTheme(
+        headlineLarge: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineMedium: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        bodyLarge: TextStyle(color: Colors.black87, fontSize: 16),
+        bodyMedium: TextStyle(color: Colors.black54, fontSize: 14),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.grey[200],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        hintStyle: const TextStyle(color: Colors.grey),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,

@@ -18,6 +18,7 @@ import '../core/constants/app_strings.dart';
 import '../core/constants/app_assets.dart';
 import 'login_screen.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../providers/theme_provider.dart';
 
 class PodcastListScreen extends ConsumerStatefulWidget {
   const PodcastListScreen({super.key});
@@ -197,6 +198,20 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                             Icons.notifications,
                             color: AppColors.textPrimary,
                             size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                          const SizedBox(width: 12),
+                          // Theme Toggle
+                          GestureDetector(
+                            onTap: () =>
+                                ref.read(themeProvider.notifier).toggle(),
+                            child: Icon(
+                              ref.watch(themeProvider)
+                                  ? Icons.light_mode
+                                  : Icons.dark_mode,
+                              color: AppColors.textPrimary,
+                              size: 20,
+                            ),
                           ),
                           const SizedBox(width: 12),
                           // Search icon

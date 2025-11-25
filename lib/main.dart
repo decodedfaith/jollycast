@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'views/splash_screen.dart';
+import 'providers/theme_provider.dart';
+import 'core/theme/app_theme.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(themeProvider);
+
     return MaterialApp(
       title: 'Jolly Podcast',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF003334),
-          primary: const Color(0xFF003334),
-          secondary: const Color(0xFFA3CB43),
-        ),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: const SplashScreen(),
     );
   }
