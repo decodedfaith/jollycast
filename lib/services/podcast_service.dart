@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/podcast_model.dart';
+import '../core/utils/error_handler.dart';
 import 'dio_provider.dart';
 
 final podcastServiceProvider = Provider<PodcastService>((ref) {
@@ -35,14 +36,16 @@ class PodcastService {
 
         return [];
       } else if (response.statusCode == 401) {
-        throw Exception('401 User not authenticated');
+        throw Exception('Session expired. Please log in again.');
       } else {
-        throw Exception('Failed to fetch podcasts: ${response.statusMessage}');
+        throw Exception('Failed to load podcasts. Please try again.');
       }
     } on DioException catch (e) {
-      throw Exception('Failed to fetch podcasts: ${e.message}');
+      final error = ErrorHandler.handleError(e);
+      throw Exception(error.message);
     } catch (e) {
-      throw Exception('An unexpected error occurred: $e');
+      final error = ErrorHandler.handleError(e);
+      throw Exception(error.message);
     }
   }
 }
