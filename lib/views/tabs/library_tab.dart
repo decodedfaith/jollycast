@@ -13,9 +13,10 @@ class LibraryTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userPrefs = ref.watch(userPreferencesViewModelProvider);
     final podcastsAsync = ref.watch(podcastListViewModelProvider);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF003334),
+      // backgroundColor: Use theme default
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -26,10 +27,10 @@ class LibraryTab extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Your Library',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: colorScheme.onSurface,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
@@ -44,10 +45,13 @@ class LibraryTab extends ConsumerWidget {
                               ),
                             );
                           },
-                          child: const Icon(Icons.search, color: Colors.white),
+                          child: Icon(
+                            Icons.search,
+                            color: colorScheme.onSurface,
+                          ),
                         ),
                         const SizedBox(width: 16),
-                        const Icon(Icons.more_vert, color: Colors.white),
+                        Icon(Icons.more_vert, color: colorScheme.onSurface),
                       ],
                     ),
                   ],
@@ -62,10 +66,10 @@ class LibraryTab extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       '🕐 Recently Played',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: colorScheme.onSurface,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -73,6 +77,7 @@ class LibraryTab extends ConsumerWidget {
                     const SizedBox(height: 16),
                     userPrefs.recentlyPlayed.isEmpty
                         ? _buildEmptyState(
+                            context,
                             Icons.history,
                             'No recent plays',
                             'Your listening history will appear here',
@@ -101,10 +106,10 @@ class LibraryTab extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       '❤️ Liked Episodes',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: colorScheme.onSurface,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -112,6 +117,7 @@ class LibraryTab extends ConsumerWidget {
                     const SizedBox(height: 16),
                     userPrefs.favoriteEpisodeIds.isEmpty
                         ? _buildEmptyState(
+                            context,
                             Icons.favorite_border,
                             'No liked episodes yet',
                             'Start liking episodes to see them here',
@@ -119,15 +125,15 @@ class LibraryTab extends ConsumerWidget {
                         : Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.white.withAlpha(13),
+                              color: colorScheme.onSurface.withAlpha(13),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Column(
                               children: [
                                 Text(
                                   '${userPrefs.favoriteEpisodeIds.length} liked episodes',
-                                  style: const TextStyle(
-                                    color: Colors.white70,
+                                  style: TextStyle(
+                                    color: colorScheme.onSurface.withAlpha(180),
                                     fontSize: 14,
                                   ),
                                 ),
@@ -148,11 +154,11 @@ class LibraryTab extends ConsumerWidget {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         Text(
                           '📻 Followed Podcasts',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: colorScheme.onSurface,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -162,6 +168,7 @@ class LibraryTab extends ConsumerWidget {
                     const SizedBox(height: 16),
                     userPrefs.followedPodcastIds.isEmpty
                         ? _buildEmptyState(
+                            context,
                             Icons.podcasts,
                             'No podcasts followed yet',
                             'Follow podcasts to get notified of new episodes',
@@ -184,9 +191,11 @@ class LibraryTab extends ConsumerWidget {
                               );
                             },
                             loading: () => const CircularProgressIndicator(),
-                            error: (_, __) => const Text(
+                            error: (_, __) => Text(
                               'Error loading podcasts',
-                              style: TextStyle(color: Colors.white70),
+                              style: TextStyle(
+                                color: colorScheme.onSurface.withAlpha(180),
+                              ),
                             ),
                           ),
                   ],
@@ -201,26 +210,38 @@ class LibraryTab extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(IconData icon, String title, String subtitle) {
+  Widget _buildEmptyState(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subtitle,
+  ) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(13),
+        color: colorScheme.onSurface.withAlpha(13),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Center(
         child: Column(
           children: [
-            Icon(icon, color: Colors.white54, size: 48),
+            Icon(icon, color: colorScheme.onSurface.withAlpha(130), size: 48),
             const SizedBox(height: 8),
             Text(
               title,
-              style: const TextStyle(color: Colors.white70, fontSize: 16),
+              style: TextStyle(
+                color: colorScheme.onSurface.withAlpha(180),
+                fontSize: 16,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: const TextStyle(color: Colors.white54, fontSize: 12),
+              style: TextStyle(
+                color: colorScheme.onSurface.withAlpha(130),
+                fontSize: 12,
+              ),
             ),
           ],
         ),
@@ -236,6 +257,7 @@ class LibraryTab extends ConsumerWidget {
   ) {
     final episodeId = item['episodeId']!;
     final podcastId = item['podcastId']!;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return FutureBuilder(
       future: ref.read(episodeListViewModelProvider(podcastId).future),
@@ -256,7 +278,7 @@ class LibraryTab extends ConsumerWidget {
           margin: const EdgeInsets.only(bottom: 8),
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.05),
+            color: colorScheme.onSurface.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
@@ -283,8 +305,8 @@ class LibraryTab extends ConsumerWidget {
                   children: [
                     Text(
                       episode.title,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: colorScheme.onSurface,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -294,15 +316,18 @@ class LibraryTab extends ConsumerWidget {
                     const SizedBox(height: 4),
                     Text(
                       'Episode',
-                      style: const TextStyle(
-                        color: Colors.white54,
+                      style: TextStyle(
+                        color: colorScheme.onSurface.withAlpha(130),
                         fontSize: 12,
                       ),
                     ),
                   ],
                 ),
               ),
-              const Icon(Icons.play_circle_outline, color: Colors.white70),
+              Icon(
+                Icons.play_circle_outline,
+                color: colorScheme.onSurface.withAlpha(180),
+              ),
             ],
           ),
         );
@@ -311,11 +336,12 @@ class LibraryTab extends ConsumerWidget {
   }
 
   Widget _buildFollowedPodcastItem(BuildContext context, dynamic podcast) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
+        color: colorScheme.onSurface.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -341,8 +367,8 @@ class LibraryTab extends ConsumerWidget {
               children: [
                 Text(
                   podcast.title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: colorScheme.onSurface,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -352,7 +378,10 @@ class LibraryTab extends ConsumerWidget {
                 const SizedBox(height: 4),
                 Text(
                   podcast.author,
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+                  style: TextStyle(
+                    color: colorScheme.onSurface.withAlpha(180),
+                    fontSize: 12,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

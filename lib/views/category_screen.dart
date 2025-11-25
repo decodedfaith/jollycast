@@ -15,12 +15,14 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF003334),
+      // backgroundColor: Use theme default
       appBar: AppBar(
         title: Text(categoryName),
-        backgroundColor: const Color(0xFF003334),
-        foregroundColor: Colors.white,
+        backgroundColor: colorScheme.surface,
+        foregroundColor: colorScheme.onSurface,
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -28,7 +30,7 @@ class CategoryScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final podcast = podcasts[index];
           return Card(
-            color: Colors.white.withAlpha(13),
+            color: colorScheme.onSurface.withAlpha(13),
             margin: const EdgeInsets.only(bottom: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -70,8 +72,8 @@ class CategoryScreen extends StatelessWidget {
                         children: [
                           Text(
                             podcast.title,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: colorScheme.onSurface,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -79,15 +81,18 @@ class CategoryScreen extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             podcast.author,
-                            style: const TextStyle(
-                              color: Colors.white70,
+                            style: TextStyle(
+                              color: colorScheme.onSurface.withAlpha(180),
                               fontSize: 14,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const Icon(Icons.chevron_right, color: Colors.white54),
+                    Icon(
+                      Icons.chevron_right,
+                      color: colorScheme.onSurface.withAlpha(130),
+                    ),
                   ],
                 ),
               ),
