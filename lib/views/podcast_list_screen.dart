@@ -19,6 +19,8 @@ import '../core/constants/app_assets.dart';
 import 'login_screen.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../providers/theme_provider.dart';
+import '../core/utils/error_handler.dart';
+import '../widgets/common/error_dialog.dart';
 
 class PodcastListScreen extends ConsumerStatefulWidget {
   const PodcastListScreen({super.key});
@@ -37,7 +39,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      // backgroundColor: Use theme default
       body: SafeArea(
         child: Stack(
           children: [
@@ -74,9 +76,16 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
             _currentIndex = index;
           });
         },
-        backgroundColor: AppColors.bottomNavBackground,
-        selectedItemColor: AppColors.textPrimary,
-        unselectedItemColor: AppColors.textTertiary,
+        // Use theme defaults or explicit overrides that respect the theme
+        backgroundColor: Theme.of(
+          context,
+        ).bottomNavigationBarTheme.backgroundColor,
+        selectedItemColor: Theme.of(
+          context,
+        ).bottomNavigationBarTheme.selectedItemColor,
+        unselectedItemColor: Theme.of(
+          context,
+        ).bottomNavigationBarTheme.unselectedItemColor,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
@@ -98,14 +107,66 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
 
   Widget _buildDiscoverTab() {
     final podcastListState = ref.watch(podcastListViewModelProvider);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return podcastListState.when(
+      loading: () => Center(
+        child: CircularProgressIndicator(color: colorScheme.secondary),
+      ),
+      error: (err, stack) {
+        // Show error dialog when there's an error
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final appError = ErrorHandler.handleError(err);
+          ErrorDialog.show(
+            context,
+            error: appError,
+            onRetry: () {
+              ref.invalidate(podcastListViewModelProvider);
+            },
+          );
+        });
+
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, size: 64, color: colorScheme.error),
+              const SizedBox(height: 16),
+              Text(
+                'Failed to load podcasts',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Tap retry to try again',
+                style: TextStyle(color: colorScheme.onSurface.withAlpha(180)),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () {
+                  ref.invalidate(podcastListViewModelProvider);
+                },
+                icon: const Icon(Icons.refresh),
+                label: const Text('Retry'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
       data: (podcasts) {
         if (podcasts.isEmpty) {
-          return const Center(
+          return Center(
             child: Text(
               AppStrings.noPodcastsFound,
-              style: TextStyle(color: AppColors.textPrimary),
+              style: TextStyle(color: colorScheme.onSurface),
             ),
           );
         }
@@ -125,7 +186,11 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Jolly Logo
-                    Image.asset(AppAssets.logo, height: 30),
+                    Image.asset(
+                      AppAssets.logo,
+                      height: 30,
+                      // Optional: color logo if needed for light mode, but asset might be colored
+                    ),
                     // Profile, Notification, Search container
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -133,8 +198,11 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.surface,
+                        color: colorScheme.surface,
                         borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: colorScheme.onSurface.withAlpha(25),
+                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -142,11 +210,11 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                           // Profile picture with Logout Menu
                           PopupMenuButton<String>(
                             offset: const Offset(0, 40),
-                            color: AppColors.surface,
+                            color: colorScheme.surface,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
-                              side: const BorderSide(
-                                color: Colors.white24,
+                              side: BorderSide(
+                                color: colorScheme.onSurface.withAlpha(25),
                                 width: 1,
                               ),
                             ),
@@ -170,20 +238,20 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                               }
                             },
                             itemBuilder: (context) => [
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
                                 value: 'logout',
                                 child: Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.logout,
                                       color: AppColors.error,
                                       size: 20,
                                     ),
-                                    SizedBox(width: 12),
+                                    const SizedBox(width: 12),
                                     Text(
                                       AppStrings.logout,
                                       style: TextStyle(
-                                        color: AppColors.textPrimary,
+                                        color: colorScheme.onSurface,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -194,12 +262,11 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                           ),
                           const SizedBox(width: 12),
                           // Notification icon
-                          const Icon(
+                          Icon(
                             Icons.notifications,
-                            color: AppColors.textPrimary,
+                            color: colorScheme.onSurface,
                             size: 20,
                           ),
-                          const SizedBox(width: 12),
                           const SizedBox(width: 12),
                           // Theme Toggle
                           GestureDetector(
@@ -209,7 +276,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                               ref.watch(themeProvider)
                                   ? Icons.light_mode
                                   : Icons.dark_mode,
-                              color: AppColors.textPrimary,
+                              color: colorScheme.onSurface,
                               size: 20,
                             ),
                           ),
@@ -223,9 +290,9 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                                 ),
                               );
                             },
-                            child: const Icon(
+                            child: Icon(
                               Icons.search,
-                              color: AppColors.textPrimary,
+                              color: colorScheme.onSurface,
                               size: 20,
                             ),
                           ),
@@ -242,15 +309,15 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
-                  children: const [
-                    Text('🔥', style: TextStyle(fontSize: 20)),
-                    SizedBox(width: 8),
+                  children: [
+                    const Text('🔥', style: TextStyle(fontSize: 20)),
+                    const SizedBox(width: 8),
                     Text(
                       AppStrings.hotAndTrending,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                   ],
@@ -264,7 +331,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                 height: 380, // Increased height for new card design
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: trending.length,
                   itemBuilder: (context, index) {
                     return _buildTrendingCard(trending[index]);
@@ -276,17 +343,23 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
             // Editor's Pick Title
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
                 child: Row(
-                  children: const [
-                    Icon(Icons.star, color: Colors.purpleAccent),
-                    SizedBox(width: 8),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
                       AppStrings.editorsPick,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    Text(
+                      AppStrings.seeAll,
+                      style: TextStyle(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -297,7 +370,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
             // Editor's Pick Card
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _buildEditorsPickCard(editorsPick),
               ),
             ),
@@ -305,41 +378,23 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
             // Newest Episodes Title
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       AppStrings.newestEpisodes,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: colorScheme.onSurface,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        if (newest.isNotEmpty) {
-                          final random = (newest.toList()..shuffle()).first;
-                          _playPodcast(context, random);
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.textTertiary),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text(
-                          AppStrings.shufflePlay,
-                          style: TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 12,
-                          ),
-                        ),
+                    Text(
+                      AppStrings.seeAll,
+                      style: TextStyle(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -350,47 +405,24 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
             // Newest Episodes List
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                final podcast = newest[index];
-                return _buildNewestEpisodeItem(context, podcast, index + 1);
+                return _buildNewestEpisodeItem(
+                  context,
+                  newest[index],
+                  index + 1,
+                );
               }, childCount: newest.length),
-            ),
-
-            // See All Button
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withAlpha(25),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Text(
-                      AppStrings.seeAll,
-                      style: TextStyle(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             ),
 
             // Mixed by Interest Title
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: const Text(
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+                child: Text(
                   AppStrings.mixedByInterest,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ),
@@ -403,17 +435,12 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
           ],
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stackTrace) => Center(
-        child: Text(
-          'Error: $error',
-          style: const TextStyle(color: AppColors.textPrimary),
-        ),
-      ),
     );
   }
 
   Widget _buildTrendingCard(dynamic podcast) {
+    // Trending card uses a dark image background, so text should always be white
+    // regardless of the theme.
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       width: 280,
@@ -611,14 +638,23 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
   }
 
   Widget _buildEditorsPickCard(dynamic podcast) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return InkWell(
       onTap: () => _playPodcast(context, podcast),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFF1E2929), // Darker card background
+          color: colorScheme.surface, // Adapts to theme
           borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(10),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -669,8 +705,8 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                 children: [
                   Text(
                     podcast.title,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: colorScheme.onSurface,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -680,12 +716,18 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'By: ${podcast.author}',
-                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withAlpha(180),
+                      fontSize: 12,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     podcast.description,
-                    style: const TextStyle(color: Colors.white54, fontSize: 10),
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withAlpha(130),
+                      fontSize: 10,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -728,7 +770,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                               decoration: BoxDecoration(
                                 color: isFollowing
                                     ? const Color(0xFF00A86B).withAlpha(76)
-                                    : Colors.white.withAlpha(51),
+                                    : colorScheme.onSurface.withAlpha(20),
                                 borderRadius: BorderRadius.circular(20),
                                 border: isFollowing
                                     ? Border.all(color: const Color(0xFF00A86B))
@@ -738,14 +780,18 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                                 children: [
                                   Icon(
                                     isFollowing ? Icons.check : Icons.add,
-                                    color: Colors.white,
+                                    color: isFollowing
+                                        ? const Color(0xFF00A86B)
+                                        : colorScheme.onSurface,
                                     size: 16,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
                                     isFollowing ? 'Following' : 'Follow',
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                                    style: TextStyle(
+                                      color: isFollowing
+                                          ? const Color(0xFF00A86B)
+                                          : colorScheme.onSurface,
                                       fontSize: 12,
                                     ),
                                   ),
@@ -758,9 +804,9 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                       const SizedBox(width: 8),
                       GestureDetector(
                         onTap: () => _handleAction('share', podcast),
-                        child: const Icon(
+                        child: Icon(
                           Icons.share,
-                          color: Colors.white70,
+                          color: colorScheme.onSurface.withAlpha(180),
                           size: 20,
                         ),
                       ),
@@ -780,6 +826,8 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
     dynamic podcast,
     int index,
   ) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return InkWell(
       onTap: () {
         Navigator.of(context).push(
@@ -795,8 +843,8 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
           children: [
             Text(
               index.toString().padLeft(2, '0'),
-              style: const TextStyle(
-                color: Colors.white54,
+              style: TextStyle(
+                color: colorScheme.onSurface.withAlpha(130),
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -847,8 +895,8 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                 children: [
                   Text(
                     podcast.title,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: colorScheme.onSurface,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
@@ -860,14 +908,20 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                     podcast.description.isNotEmpty
                         ? podcast.description
                         : 'In this episode of the Change Africa Podcast...',
-                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withAlpha(180),
+                      fontSize: 12,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  Text(
                     '20 June, 23 • 30 minutes',
-                    style: TextStyle(color: Colors.white54, fontSize: 10),
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withAlpha(130),
+                      fontSize: 10,
+                    ),
                   ),
                 ],
               ),
@@ -887,6 +941,7 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
       '#Comedy',
       '#Talkshow',
     ];
+    final colorScheme = Theme.of(context).colorScheme;
 
     return SliverPadding(
       padding: const EdgeInsets.all(16),
@@ -901,8 +956,15 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
           final category = categories[index % categories.length];
           return Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF1E1E1E),
+              color: colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withAlpha(10),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: InkWell(
               onTap: () {
@@ -953,8 +1015,8 @@ class _PodcastListScreenState extends ConsumerState<PodcastListScreen> {
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
                       category,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),

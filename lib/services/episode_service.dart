@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/episode_model.dart';
+import '../core/utils/error_handler.dart';
 import 'dio_provider.dart';
 
 final episodeServiceProvider = Provider<EpisodeService>((ref) {
@@ -20,6 +21,9 @@ class EpisodeService {
       '/api/episodes?podcast_id=$podcastId',
       '/api/podcasts/$podcastId', // Might return podcast with episodes
     ];
+
+    Exception? lastException;
+
     for (var url in endpoints) {
       try {
         final response = await _dio.get(url);
@@ -31,13 +35,21 @@ class EpisodeService {
         if (e.response?.statusCode == 404) {
           continue; // Try next endpoint
         }
-        // For other errors, continue trying
+        // Store the error but continue trying
+        lastException = Exception(ErrorHandler.handleError(e).message);
         continue;
       } catch (e) {
+        lastException = Exception(ErrorHandler.handleError(e).message);
         continue;
       }
     }
 
+    // If we've tried all endpoints and still no success
+    if (lastException != null) {
+      throw lastException;
+    }
+
+    // No episodes found but no error either
     return [];
   }
 
@@ -102,6 +114,7 @@ class EpisodeService {
 
       return [];
     } catch (e) {
+      // If parsing fails, return empty list rather than throwing
       return [];
     }
   }

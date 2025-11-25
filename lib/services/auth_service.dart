@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user_model.dart';
+import '../core/utils/error_handler.dart';
 import 'dio_provider.dart';
 
 final authServiceProvider = Provider<AuthService>((ref) {
@@ -28,9 +29,15 @@ class AuthService {
         throw Exception('Failed to login: ${response.statusMessage}');
       }
     } on DioException catch (e) {
-      throw Exception('Login failed: ${e.message}');
+      // Use error handler to get user-friendly message
+      final error = ErrorHandler.handleError(e);
+
+      // Throw exception with user-friendly message
+      throw Exception(error.message);
     } catch (e) {
-      throw Exception('An unexpected error occurred: $e');
+      // Handle any other unexpected errors
+      final error = ErrorHandler.handleError(e);
+      throw Exception(error.message);
     }
   }
 }

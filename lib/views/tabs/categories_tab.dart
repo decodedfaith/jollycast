@@ -27,9 +27,10 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
   Widget build(BuildContext context) {
     final podcastListState = ref.watch(podcastListViewModelProvider);
     final categoryState = ref.watch(categoryViewModelProvider);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF003334),
+      // backgroundColor: Use theme default
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,14 +44,17 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                   Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: colorScheme.onSurface,
+                        ),
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                       const SizedBox(width: 8),
-                      const Text(
+                      Text(
                         'All podcast categories',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: colorScheme.onSurface,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -59,7 +63,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                   ),
                   if (_searchQuery.isNotEmpty)
                     IconButton(
-                      icon: const Icon(Icons.clear, color: Colors.white),
+                      icon: Icon(Icons.clear, color: colorScheme.onSurface),
                       onPressed: () {
                         _searchController.clear();
                         setState(() {
@@ -82,16 +86,21 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                 },
                 decoration: InputDecoration(
                   hintText: 'Search categories or podcasts',
-                  hintStyle: const TextStyle(color: Colors.white54),
+                  hintStyle: TextStyle(
+                    color: colorScheme.onSurface.withAlpha(130),
+                  ),
                   filled: true,
-                  fillColor: Colors.white.withAlpha(25),
+                  fillColor: colorScheme.onSurface.withAlpha(25),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
-                  prefixIcon: const Icon(Icons.search, color: Colors.white54),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: colorScheme.onSurface.withAlpha(130),
+                  ),
                 ),
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: colorScheme.onSurface),
               ),
             ),
             const SizedBox(height: 16),
@@ -100,10 +109,12 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
               child: podcastListState.when(
                 data: (podcasts) {
                   if (categoryState.categorizedPodcasts.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text(
                         'No categories available',
-                        style: TextStyle(color: Colors.white70),
+                        style: TextStyle(
+                          color: colorScheme.onSurface.withAlpha(180),
+                        ),
                       ),
                     );
                   }
@@ -114,26 +125,30 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                     podcasts,
                   );
                 },
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: () => Center(
+                  child: CircularProgressIndicator(
+                    color: colorScheme.secondary,
+                  ),
+                ),
                 error: (error, stackTrace) => Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.error_outline,
-                        color: Colors.red,
+                        color: colorScheme.error,
                         size: 48,
                       ),
                       const SizedBox(height: 16),
                       Text(
                         'Error loading categories',
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color: colorScheme.onSurface),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         error.toString(),
-                        style: const TextStyle(
-                          color: Colors.white54,
+                        style: TextStyle(
+                          color: colorScheme.onSurface.withAlpha(130),
                           fontSize: 12,
                         ),
                         textAlign: TextAlign.center,
@@ -155,6 +170,8 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
     List<String> availableCategories,
     List<Podcast> allPodcasts,
   ) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     // Filter categories based on search query
     final filteredCategories = _searchQuery.isEmpty
         ? availableCategories
@@ -167,16 +184,26 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.search_off, color: Colors.white54, size: 64),
+            Icon(
+              Icons.search_off,
+              color: colorScheme.onSurface.withAlpha(130),
+              size: 64,
+            ),
             const SizedBox(height: 16),
             Text(
               'No categories found for "$_searchQuery"',
-              style: const TextStyle(color: Colors.white70, fontSize: 16),
+              style: TextStyle(
+                color: colorScheme.onSurface.withAlpha(180),
+                fontSize: 16,
+              ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Try a different search term',
-              style: TextStyle(color: Colors.white54, fontSize: 14),
+              style: TextStyle(
+                color: colorScheme.onSurface.withAlpha(130),
+                fontSize: 14,
+              ),
             ),
           ],
         ),
@@ -208,8 +235,15 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF1E1E1E),
+              color: colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withAlpha(10),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: Stack(
               children: [
@@ -258,7 +292,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                       Text(
                         category,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.white, // Always white on dark overlay
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -267,7 +301,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                       Text(
                         '$podcastCount podcast${podcastCount != 1 ? 's' : ''}',
                         style: const TextStyle(
-                          color: Colors.white70,
+                          color: Colors.white70, // Always white on dark overlay
                           fontSize: 12,
                         ),
                       ),
