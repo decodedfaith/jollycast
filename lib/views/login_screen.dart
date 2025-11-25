@@ -8,6 +8,8 @@ import '../core/constants/app_strings.dart';
 import '../core/constants/app_assets.dart';
 import '../widgets/common/jolly_button.dart';
 import '../widgets/common/jolly_text_field.dart';
+import '../widgets/common/error_dialog.dart';
+import '../core/utils/error_handler.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -77,9 +79,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     ref.listen<AsyncValue>(authViewModelProvider, (previous, next) {
       if (next is AsyncError) {
-        ScaffoldMessenger.of(
+        // Parse error and show error dialog
+        final appError = ErrorHandler.handleError(next.error);
+
+        ErrorDialog.show(
           context,
-        ).showSnackBar(SnackBar(content: Text(next.error.toString())));
+          error: appError,
+          onRetry: appError.canRetry ? _handleOtpSubmit : null,
+        );
       } else if (next is AsyncData && next.value != null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const OnboardingScreen()),
