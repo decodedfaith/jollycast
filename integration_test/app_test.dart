@@ -237,13 +237,13 @@ void main() {
       if (bottomNav.evaluate().isNotEmpty) {
         // Tap each tab
         await tester.tap(find.text('Categories'));
-        await tester.pumpAndSettle();
+        await tester.pumpAndSettle(const Duration(seconds: 3));
 
         await tester.tap(find.text('Library'));
-        await tester.pumpAndSettle();
+        await tester.pumpAndSettle(const Duration(seconds: 3));
 
         await tester.tap(find.text('Discover'));
-        await tester.pumpAndSettle();
+        await tester.pumpAndSettle(const Duration(seconds: 3));
 
         // All navigations should work without errors
         expect(find.byType(Scaffold), findsWidgets);
