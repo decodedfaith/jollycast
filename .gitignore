@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase configuration
+google-services.json
+firebase-app-distribution.json
+firebase-credentials.json
+GoogleService-Info.plist
