@@ -20,6 +20,7 @@ class PlayerState {
   final List<Episode> queue;
   final int currentIndex;
   final double playbackSpeed;
+  final String? errorMessage;
 
   PlayerState({
     this.isPlaying = false,
@@ -32,6 +33,7 @@ class PlayerState {
     this.queue = const [],
     this.currentIndex = 0,
     this.playbackSpeed = 1.0,
+    this.errorMessage,
   });
 
   PlayerState copyWith({
@@ -45,6 +47,7 @@ class PlayerState {
     List<Episode>? queue,
     int? currentIndex,
     double? playbackSpeed,
+    String? errorMessage,
   }) {
     return PlayerState(
       isPlaying: isPlaying ?? this.isPlaying,
@@ -57,15 +60,28 @@ class PlayerState {
       queue: queue ?? this.queue,
       currentIndex: currentIndex ?? this.currentIndex,
       playbackSpeed: playbackSpeed ?? this.playbackSpeed,
+      errorMessage: errorMessage,
     );
   }
 }
 
 class PlayerViewModel extends Notifier<PlayerState> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  late final AudioPlayer _audioPlayer;
 
   @override
   PlayerState build() {
+    // Initialize with robust buffering configuration to prevent "cracking"
+    _audioPlayer = AudioPlayer(
+      audioLoadConfiguration: const AudioLoadConfiguration(
+        androidLoadControl: AndroidLoadControl(
+          minBufferDuration: Duration(seconds: 15),
+          maxBufferDuration: Duration(seconds: 50),
+          bufferForPlaybackDuration: Duration(seconds: 5),
+          bufferForPlaybackAfterRebufferDuration: Duration(seconds: 10),
+        ),
+        darwinLoadControl: DarwinLoadControl(),
+      ),
+    );
     _init();
     ref.onDispose(() {
       _audioPlayer.dispose();
@@ -121,6 +137,18 @@ class PlayerViewModel extends Notifier<PlayerState> {
         );
       }
     });
+
+    // Listen for playback events to catch errors
+    _audioPlayer.playbackEventStream.listen(
+      (event) {},
+      onError: (Object e, StackTrace st) {
+        state = state.copyWith(
+          errorMessage: 'Playback error: ${e.toString()}',
+          isPlaying: false,
+          isBuffering: false,
+        );
+      },
+    );
   }
 
   Future<void> playPodcast(Podcast podcast) async {
@@ -132,7 +160,10 @@ class PlayerViewModel extends Notifier<PlayerState> {
         await _audioPlayer.setUrl(podcast.audioUrl);
         _audioPlayer.play();
       } catch (e) {
-        // Silently handle errors
+        state = state.copyWith(
+          errorMessage: 'Failed to play podcast: ${e.toString()}',
+          isPlaying: false,
+        );
       }
     } else {
       togglePlayPause();
@@ -181,7 +212,11 @@ class PlayerViewModel extends Notifier<PlayerState> {
 
   Future<void> playPlaylist(List<Episode> episodes, int initialIndex) async {
     try {
-      state = state.copyWith(queue: episodes, currentIndex: initialIndex);
+      state = state.copyWith(
+        queue: episodes,
+        currentIndex: initialIndex,
+        errorMessage: null, // Clear previous errors
+      );
 
       final audioSources = episodes.map((e) {
         return AudioSource.uri(
@@ -198,7 +233,10 @@ class PlayerViewModel extends Notifier<PlayerState> {
       );
       _audioPlayer.play();
     } catch (e) {
-      // Silently handle errors
+      state = state.copyWith(
+        errorMessage: 'Failed to load playlist: ${e.toString()}',
+        isPlaying: false,
+      );
     }
   }
 

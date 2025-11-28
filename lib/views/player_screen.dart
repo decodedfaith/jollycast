@@ -76,6 +76,20 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
     final playerState = ref.watch(playerViewModelProvider);
     final userPrefs = ref.watch(userPreferencesViewModelProvider);
 
+    // Listen for errors
+    ref.listen(playerViewModelProvider, (previous, next) {
+      if (next.errorMessage != null &&
+          next.errorMessage != previous?.errorMessage) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.errorMessage!),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    });
+
     final currentEpisode = playerState.currentEpisode ?? widget.episode;
     final currentIndex = playerState.currentIndex;
     final isFavorite = userPrefs.favoriteEpisodeIds.contains(currentEpisode.id);
