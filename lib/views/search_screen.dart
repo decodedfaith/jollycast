@@ -106,10 +106,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   Widget _buildSearchHistory(List<String> history) {
     if (history.isEmpty) {
-      return Center(
+      return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.search, color: Colors.white54, size: 64),
             SizedBox(height: 16),
             Text(

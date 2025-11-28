@@ -459,7 +459,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
           const SizedBox(height: 24),
           const Text(
-            "${AppStrings.allSet}Devon!",
+            '${AppStrings.allSet}Devon!',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 24,

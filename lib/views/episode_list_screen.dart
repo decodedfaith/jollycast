@@ -79,10 +79,10 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
       body: episodesState.when(
         data: (episodes) {
           if (episodes.isEmpty) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(
                     Icons.podcasts_outlined,
                     size: 64,
@@ -294,9 +294,9 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text(
+                          const Text(
                             '5 Subscribers',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.white70,
                               fontSize: 12,
                             ),
