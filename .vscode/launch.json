@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "jollycast (Profile Mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "jollycast (Debug Mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "Run Performance Test",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "program": "integration_test/performance_test.dart"
+        }
+    ]
+}
