@@ -37,37 +37,60 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
         
+      - name: Verify APK exists
+        run: |
+          if [ ! -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
+            echo "❌ ERROR: APK file not found!"
+            echo "Listing build directory contents:"
+            ls -la build/app/outputs/flutter-apk/ || echo "Directory doesn't exist"
+            exit 1
+          fi
+          echo "✅ APK file found successfully"
+          echo "APK size: $(du -h build/app/outputs/flutter-apk/app-release.apk | cut -f1)"
+        
       - name: Get version from tag
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
         if: startsWith(github.ref, 'refs/tags/')
+        
+      - name: Rename APK with version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/}"
+          cp build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/jollycast-${VERSION}.apk
+          echo "Renamed APK to: jollycast-${VERSION}.apk"
+          ls -lh build/app/outputs/flutter-apk/
         
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           files: |
+            build/app/outputs/flutter-apk/jollycast-${{ steps.version.outputs.VERSION }}.apk
             build/app/outputs/flutter-apk/app-release.apk
           name: Release ${{ steps.version.outputs.VERSION }}
           body: |
             ## 📱 Jollycast ${{ steps.version.outputs.VERSION }}
             
-            ### Download Options
-            - **Direct APK**: Download the APK file below
+            ### 📥 Download Options
+            - **Direct APK**: Download `jollycast-${{ steps.version.outputs.VERSION }}.apk` below
             - **Firebase App Distribution**: Available for beta testers
             - **Appetize.io**: Try it in browser (link in README)
             
-            ### Installation
-            1. Download `app-release.apk`
+            ### 📲 Installation
+            1. Download `jollycast-${{ steps.version.outputs.VERSION }}.apk` from the Assets section below
             2. Enable "Install from Unknown Sources" on your Android device
             3. Install the APK
             
-            ### Demo Credentials
+            ### 🔐 Demo Credentials
             - Phone: `08114227399`
             - Password: `Development@101`
             
-            ### What's New
+            ### 📝 What's New
             See CHANGELOG.md for details
+            
+            ---
+            **Note**: Ignore the "Source code" zip files - download the `.apk` file instead.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
