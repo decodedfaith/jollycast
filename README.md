@@ -6,7 +6,7 @@
 
 A modern, feature-rich podcast streaming application built with Flutter. Jollycast provides a seamless experience for discovering, streaming, and enjoying your favorite podcasts.
 
-![Demo of Jollycast App](assets/mp4/demo.gif)
+![Demo of Jollycast App](docs/assets/demo.gif)
 
 ## ✨ Features
 
