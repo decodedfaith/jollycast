@@ -65,7 +65,7 @@ flutter build apk --release
 
 ### Your Demo Link Format
 ```
-https://appetize.io/app/YOUR_PUBLIC_KEY?device=pixel7&osVersion=13.0&scale=75
+https://appetize.io/app/b_stft7q4fdfzrrci7ynwwxoim7u?device=pixel7&osVersion=13.0&scale=75
 ```
 
 **📚 Full Guide**: See [APPETIZE_SETUP.md](APPETIZE_SETUP.md)

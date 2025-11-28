@@ -10,6 +10,9 @@ jobs:
   build:
     name: Build APK
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: jollycast
     
     steps:
       - name: Checkout code

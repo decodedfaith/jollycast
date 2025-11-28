@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Jollycast brand color - Dark Green -->
+    <color name="launch_background_color">#003334</color>
+	<color name="ic_launcher_background">#003334</color>
+</resources>

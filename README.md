@@ -27,7 +27,7 @@ A modern, feature-rich podcast streaming application built with Flutter. Jollyca
 Download the latest APK from the [Releases](https://github.com/decodedfaith/jollycast/releases) page.
 
 ### Option 2: Try in Browser (Appetize.io)
-[![Try on Appetize](https://img.shields.io/badge/Try%20Now-Appetize.io-orange?style=for-the-badge)](https://appetize.io/app/YOUR_APP_ID)
+[![Try on Appetize](https://img.shields.io/badge/Try%20Now-Appetize.io-orange?style=for-the-badge)](https://appetize.io/app/b_stft7q4fdfzrrci7ynwwxoim7u)
 
 **No installation needed!** Try Jollycast directly in your browser. See [Appetize Setup Guide](APPETIZE_SETUP.md) for details.
 
@@ -209,5 +209,7 @@ For support, email komolafefaith@gmail.com or open an issue in this repository.
 ---
 
 <div align="center">
-  Made with ❤️ using Flutter
+  
+**Built with ❤️ by [Faith (decodedfaith)](https://github.com/decodedfaith) using Flutter**
+
 </div>
