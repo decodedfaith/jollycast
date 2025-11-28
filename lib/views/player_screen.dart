@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../viewmodels/player_viewmodel.dart';
 import '../viewmodels/user_preferences_viewmodel.dart';
 import '../models/podcast_model.dart';
@@ -159,10 +160,18 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen>
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: currentEpisode.thumbnail.isNotEmpty
-                              ? Image.network(
-                                  currentEpisode.thumbnail,
+                              ? CachedNetworkImage(
+                                  imageUrl: currentEpisode.thumbnail,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
+                                  placeholder: (context, url) => Container(
+                                    color: Colors.white.withAlpha(51),
+                                    child: const Icon(
+                                      Icons.podcasts,
+                                      size: 100,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
                                       Container(
                                         color: Colors.white.withAlpha(51),
                                         child: const Icon(

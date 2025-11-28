@@ -25,21 +25,21 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
+    // _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
+    // _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _onScroll() {
-    setState(() {
-      // Track scroll for future use
-    });
-  }
+  // void _onScroll() {
+  //   setState(() {
+  //     // Track scroll for future use
+  //   });
+  // }
 
   String _formatDuration(Duration duration) {
     final minutes = duration.inMinutes;
