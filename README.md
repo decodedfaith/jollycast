@@ -1,6 +1,6 @@
 # 🎧 Jollycast - Podcast Streaming App
 
-[![Build Android APK](https://github.com/YOUR_USERNAME/Jollycast/actions/workflows/build-android.yml/badge.svg)](https://github.com/YOUR_USERNAME/Jollycast/actions/workflows/build-android.yml)
+[![Build Android APK](https://github.com/decodedfaith/jollycast/actions/workflows/build-android.yml/badge.svg)](https://github.com/decodedfaith/jollycast/actions/workflows/build-android.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Flutter](https://img.shields.io/badge/Flutter-3.24.0-02569B?logo=flutter)](https://flutter.dev)
 
@@ -22,9 +22,9 @@ A modern, feature-rich podcast streaming application built with Flutter. Jollyca
 ## 📥 Download & Try
 
 ### Option 1: Direct APK Download
-[![Download APK](https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android)](https://github.com/YOUR_USERNAME/Jollycast/releases/latest)
+[![Download APK](https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android)](https://github.com/decodedfaith/jollycast/releases/latest)
 
-Download the latest APK from the [Releases](https://github.com/YOUR_USERNAME/Jollycast/releases) page.
+Download the latest APK from the [Releases](https://github.com/decodedfaith/jollycast/releases) page.
 
 ### Option 2: Try in Browser (Appetize.io)
 [![Try on Appetize](https://img.shields.io/badge/Try%20Now-Appetize.io-orange?style=for-the-badge)](https://appetize.io/app/YOUR_APP_ID)
@@ -77,8 +77,8 @@ For demo/testing purposes, use these credentials:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/Jollycast.git
-   cd Jollycast/jollycast
+   git clone https://github.com/decodedfaith/jollycast.git
+   cd jollycast/jollycast
    ```
 
 2. **Install dependencies**
@@ -185,9 +185,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Your Name**
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)  
-- LinkedIn: [Your Name](https://linkedin.com/in/YOUR_PROFILE)
+**Faith Adetunji**
+- GitHub: [@decodedfaith](https://github.com/decodedfaith)  
+- LinkedIn: [Faith Adetunji](https://www.linkedin.com/in/faithadetunji/)
 
 ## 🙏 Acknowledgments
 
@@ -198,7 +198,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email your@email.com or open an issue in this repository.
+For support, email komolafefaith@gmail.com or open an issue in this repository.
 
 ## 📚 Additional Documentation
 
