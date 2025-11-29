@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'login_screen.dart';
+import 'onboarding_screen.dart';
 import 'podcast_list_screen.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../core/constants/app_colors.dart';
@@ -89,9 +89,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         MaterialPageRoute(builder: (_) => const PodcastListScreen()),
       );
     } else {
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+      );
     }
   }
 
