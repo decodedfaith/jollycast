@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'views/splash_screen.dart';
 import 'providers/theme_provider.dart';
 import 'core/theme/app_theme.dart';
+import 'services/predictive_service.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -14,6 +15,8 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDarkMode = ref.watch(themeProvider);
+    // Initialize Predictive Service
+    ref.read(predictiveServiceProvider);
 
     return MaterialApp(
       title: 'Jolly Podcast',

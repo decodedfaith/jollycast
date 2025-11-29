@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import '../models/podcast_model.dart';
 import '../models/episode_model.dart';
+import '../services/media_cache_service.dart';
 
 final playerViewModelProvider = NotifierProvider<PlayerViewModel, PlayerState>(
   () {
@@ -220,12 +221,17 @@ class PlayerViewModel extends Notifier<PlayerState> {
         errorMessage: null, // Clear previous errors
       );
 
-      final audioSources = episodes.map((e) {
-        return AudioSource.uri(
-          Uri.parse(e.audioUrl),
-          tag: e, // Store episode metadata
-        );
-      }).toList();
+      final audioSources = await Future.wait(
+        episodes.map((e) async {
+          final cachedPath = await ref
+              .read(mediaCacheServiceProvider)
+              .getCachedFilePath(e.audioUrl);
+          if (cachedPath != null) {
+            return AudioSource.file(cachedPath, tag: e);
+          }
+          return AudioSource.uri(Uri.parse(e.audioUrl), tag: e);
+        }),
+      );
 
       // Use setAudioSources instead of deprecated ConcatenatingAudioSource
       await _audioPlayer.setAudioSources(
