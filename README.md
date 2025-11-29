@@ -24,7 +24,13 @@ A modern, feature-rich podcast streaming application built with Flutter. Jollyca
 ### Option 1: Direct APK Download
 [![Download APK](https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android)](https://github.com/decodedfaith/jollycast/releases/latest)
 
-Download the latest APK from the [Releases](https://github.com/decodedfaith/jollycast/releases) page.
+**How to download:**
+1. Visit the [Releases](https://github.com/decodedfaith/jollycast/releases/latest) page
+2. Scroll to the **Assets** section 
+3. Download the `jollycast-v*.apk` file (ignore the "Source code" zip files)
+4. Install on your Android device
+
+> **Note**: If no APK is available, download from [GitHub Actions artifacts](https://github.com/decodedfaith/jollycast/actions) or use Option 2 (Appetize.io) to try the app.
 
 ### Option 2: Try in Browser (Appetize.io)
 [![Try on Appetize](https://img.shields.io/badge/Try%20Now-Appetize.io-orange?style=for-the-badge)](https://appetize.io/app/b_ph6y5cef7vb7m72ygcd24wq3ty?device=pixel7&osVersion=13.0&toolbar=true)
