@@ -77,12 +77,10 @@ class PlayerViewModel extends Notifier<PlayerState> {
         androidLoadControl: AndroidLoadControl(
           minBufferDuration: Duration(seconds: 30), // Increased from 15s
           maxBufferDuration: Duration(seconds: 120), // Increased from 50s
-          bufferForPlaybackDuration: Duration(
-            milliseconds: 2500,
-          ), // Reduced to 2.5s for faster start
+          bufferForPlaybackDuration: Duration.zero, // Instant start
           bufferForPlaybackAfterRebufferDuration: Duration(
-            seconds: 5,
-          ), // Reduced to 5s
+            seconds: 2,
+          ), // Minimal rebuffer wait
         ),
         darwinLoadControl: DarwinLoadControl(),
       ),
