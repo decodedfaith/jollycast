@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 import '../viewmodels/auth_viewmodel.dart';
-import 'onboarding_screen.dart';
+import 'podcast_list_screen.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_strings.dart';
 import '../core/constants/app_assets.dart';
@@ -89,7 +89,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
       } else if (next is AsyncData && next.value != null) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+          MaterialPageRoute(builder: (_) => const PodcastListScreen()),
         );
       }
     });

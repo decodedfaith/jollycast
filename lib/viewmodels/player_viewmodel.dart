@@ -74,10 +74,12 @@ class PlayerViewModel extends Notifier<PlayerState> {
     _audioPlayer = AudioPlayer(
       audioLoadConfiguration: const AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(
-          minBufferDuration: Duration(seconds: 15),
-          maxBufferDuration: Duration(seconds: 50),
-          bufferForPlaybackDuration: Duration(seconds: 5),
-          bufferForPlaybackAfterRebufferDuration: Duration(seconds: 10),
+          minBufferDuration: Duration(seconds: 30), // Increased from 15s
+          maxBufferDuration: Duration(seconds: 120), // Increased from 50s
+          bufferForPlaybackDuration: Duration(seconds: 10), // Increased from 5s
+          bufferForPlaybackAfterRebufferDuration: Duration(
+            seconds: 15,
+          ), // Increased from 10s
         ),
         darwinLoadControl: DarwinLoadControl(),
       ),

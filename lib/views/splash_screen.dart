@@ -6,6 +6,7 @@ import 'podcast_list_screen.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_assets.dart';
+import '../models/user_model.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -62,9 +63,28 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     if (!mounted) return;
 
+    // Watch the provider to ensure we get the latest state
     final authState = ref.read(authViewModelProvider);
 
-    if (authState.value != null) {
+    // If still loading, we might need to wait (though 4 seconds is usually enough)
+    // Ideally, we should listen to the provider.
+    if (authState.isLoading) {
+      // Simple polling or listening could work, but let's just check value.
+      // If it's loading, it means we haven't determined auth yet.
+      // Let's listen for the next state change if it's loading.
+      ref.listenManual(authViewModelProvider, (previous, next) {
+        if (!next.isLoading && mounted) {
+          _navigateBasedOnAuth(next.value);
+        }
+      });
+      return;
+    }
+
+    _navigateBasedOnAuth(authState.value);
+  }
+
+  void _navigateBasedOnAuth(User? user) {
+    if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const PodcastListScreen()),
       );
