@@ -77,10 +77,12 @@ class PlayerViewModel extends Notifier<PlayerState> {
         androidLoadControl: AndroidLoadControl(
           minBufferDuration: Duration(seconds: 30), // Increased from 15s
           maxBufferDuration: Duration(seconds: 120), // Increased from 50s
-          bufferForPlaybackDuration: Duration(seconds: 10), // Increased from 5s
+          bufferForPlaybackDuration: Duration(
+            milliseconds: 2500,
+          ), // Reduced to 2.5s for faster start
           bufferForPlaybackAfterRebufferDuration: Duration(
-            seconds: 15,
-          ), // Increased from 10s
+            seconds: 5,
+          ), // Reduced to 5s
         ),
         darwinLoadControl: DarwinLoadControl(),
       ),
@@ -160,7 +162,9 @@ class PlayerViewModel extends Notifier<PlayerState> {
       state = state.copyWith(currentPodcast: podcast);
       try {
         if (podcast.audioUrl.isEmpty) return;
+
         await _audioPlayer.setUrl(podcast.audioUrl);
+
         _audioPlayer.play();
       } catch (e) {
         state = state.copyWith(
