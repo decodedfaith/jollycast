@@ -28,24 +28,17 @@ jobs:
           channel: 'stable'
           
       - name: Get dependencies
-        run: |
-          cd jollycast
-          flutter pub get
+        run: flutter pub get
         
       - name: Run tests
-        run: |
-          cd jollycast
-          flutter test
+        run: flutter test
         continue-on-error: true
         
       - name: Build APK
-        run: |
-          cd jollycast
-          flutter build apk --release
+        run: flutter build apk --release
         
       - name: Verify APK exists
         run: |
-          cd jollycast
           if [ ! -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
             echo "❌ ERROR: APK file not found!"
             echo "Listing build directory contents:"
@@ -63,7 +56,6 @@ jobs:
       - name: Rename APK with version
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          cd jollycast
           VERSION="${GITHUB_REF#refs/tags/}"
           cp build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/jollycast-${VERSION}.apk
           echo "Renamed APK to: jollycast-${VERSION}.apk"
@@ -74,8 +66,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            jollycast/build/app/outputs/flutter-apk/jollycast-${{ steps.version.outputs.VERSION }}.apk
-            jollycast/build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/flutter-apk/jollycast-${{ steps.version.outputs.VERSION }}.apk
+            build/app/outputs/flutter-apk/app-release.apk
           name: Release ${{ steps.version.outputs.VERSION }}
           body: |
             ## 📱 Jollycast ${{ steps.version.outputs.VERSION }}
