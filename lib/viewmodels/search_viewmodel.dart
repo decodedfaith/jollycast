@@ -65,6 +65,11 @@ class SearchViewModel extends Notifier<SearchState> {
     }
     _searchService = SearchService(prefs);
     _loadSearchHistory();
+
+    ref.onDispose(() {
+      _debounce?.cancel();
+    });
+
     return SearchState();
   }
 

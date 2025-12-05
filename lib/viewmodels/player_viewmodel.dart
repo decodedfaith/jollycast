@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import '../models/podcast_model.dart';
@@ -69,6 +70,8 @@ class PlayerState {
 class PlayerViewModel extends Notifier<PlayerState> {
   late final AudioPlayer _audioPlayer;
 
+  final List<StreamSubscription> _subscriptions = [];
+
   @override
   PlayerState build() {
     // Initialize with robust buffering configuration to prevent "cracking"
@@ -87,70 +90,86 @@ class PlayerViewModel extends Notifier<PlayerState> {
     );
     _init();
     ref.onDispose(() {
+      for (final sub in _subscriptions) {
+        sub.cancel();
+      }
+      _subscriptions.clear();
       _audioPlayer.dispose();
     });
     return PlayerState();
   }
 
   void _init() {
-    _audioPlayer.playerStateStream.listen((playerState) {
-      final isPlaying = playerState.playing;
-      final processingState = playerState.processingState;
+    _subscriptions.add(
+      _audioPlayer.playerStateStream.listen((playerState) {
+        final isPlaying = playerState.playing;
+        final processingState = playerState.processingState;
 
-      if (processingState == ProcessingState.completed) {
-        // Playlist completion is handled by ConcatenatingAudioSource usually,
-        // but if the whole list finishes:
-        state = state.copyWith(
-          isPlaying: false,
-          position: Duration.zero,
-          isBuffering: false,
-        );
-        _audioPlayer.seek(Duration.zero, index: 0);
-        _audioPlayer.pause();
-      } else {
-        state = state.copyWith(
-          isPlaying: isPlaying,
-          isBuffering:
-              processingState == ProcessingState.buffering ||
-              processingState == ProcessingState.loading,
-        );
-      }
-    });
+        if (processingState == ProcessingState.completed) {
+          // Playlist completion is handled by ConcatenatingAudioSource usually,
+          // but if the whole list finishes:
+          state = state.copyWith(
+            isPlaying: false,
+            position: Duration.zero,
+            isBuffering: false,
+          );
+          _audioPlayer.seek(Duration.zero, index: 0);
+          _audioPlayer.pause();
+        } else {
+          state = state.copyWith(
+            isPlaying: isPlaying,
+            isBuffering:
+                processingState == ProcessingState.buffering ||
+                processingState == ProcessingState.loading,
+          );
+        }
+      }),
+    );
 
-    _audioPlayer.positionStream.listen((position) {
-      state = state.copyWith(position: position);
-    });
+    _subscriptions.add(
+      _audioPlayer.positionStream.listen((position) {
+        state = state.copyWith(position: position);
+      }),
+    );
 
-    _audioPlayer.bufferedPositionStream.listen((bufferedPosition) {
-      state = state.copyWith(bufferedPosition: bufferedPosition);
-    });
+    _subscriptions.add(
+      _audioPlayer.bufferedPositionStream.listen((bufferedPosition) {
+        state = state.copyWith(bufferedPosition: bufferedPosition);
+      }),
+    );
 
-    _audioPlayer.durationStream.listen((duration) {
-      state = state.copyWith(duration: duration ?? Duration.zero);
-    });
+    _subscriptions.add(
+      _audioPlayer.durationStream.listen((duration) {
+        state = state.copyWith(duration: duration ?? Duration.zero);
+      }),
+    );
 
-    _audioPlayer.currentIndexStream.listen((index) {
-      if (index != null &&
-          state.queue.isNotEmpty &&
-          index < state.queue.length) {
-        state = state.copyWith(
-          currentIndex: index,
-          currentEpisode: state.queue[index],
-          // Reset duration/position for new track until stream updates
-        );
-      }
-    });
+    _subscriptions.add(
+      _audioPlayer.currentIndexStream.listen((index) {
+        if (index != null &&
+            state.queue.isNotEmpty &&
+            index < state.queue.length) {
+          state = state.copyWith(
+            currentIndex: index,
+            currentEpisode: state.queue[index],
+            // Reset duration/position for new track until stream updates
+          );
+        }
+      }),
+    );
 
     // Listen for playback events to catch errors
-    _audioPlayer.playbackEventStream.listen(
-      (event) {},
-      onError: (Object e, StackTrace st) {
-        state = state.copyWith(
-          errorMessage: 'Playback error: ${e.toString()}',
-          isPlaying: false,
-          isBuffering: false,
-        );
-      },
+    _subscriptions.add(
+      _audioPlayer.playbackEventStream.listen(
+        (event) {},
+        onError: (Object e, StackTrace st) {
+          state = state.copyWith(
+            errorMessage: 'Playback error: ${e.toString()}',
+            isPlaying: false,
+            isBuffering: false,
+          );
+        },
+      ),
     );
   }
 
