@@ -1,11 +1,11 @@
 {
-    "name": "jollycast",
-    "short_name": "jollycast",
+    "name": "Jolcast",
+    "short_name": "Jolcast",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Jolcast - A modern podcast streaming application.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

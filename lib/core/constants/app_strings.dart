@@ -1,6 +1,6 @@
 class AppStrings {
   // General
-  static const String appName = 'Jollycast';
+  static const String appName = 'Jolcast';
   static const String continueText = 'Continue';
   static const String skipForNow = 'Skip for now';
 
@@ -26,13 +26,13 @@ class AppStrings {
 
   static const String welcome = 'Welcome, ';
   static const String selectInterests =
-      'Personalize your Jolly experience by selecting your top interest and favorite topics.';
+      'Personalize your Jolcast experience by selecting your top interest and favorite topics.';
   static const String selectAvatar = 'Select an avatar to represent your funk';
 
   static const String enjoyUnlimited = 'Enjoy unlimited podcasts';
-  static const String dailyPlan = 'Daily Jolly Plan';
-  static const String weeklyPlan = 'Weekly Jolly Plan';
-  static const String monthlyPlan = 'Monthly Jolly Plan';
+  static const String dailyPlan = 'Daily Jolcast Plan';
+  static const String weeklyPlan = 'Weekly Jolcast Plan';
+  static const String monthlyPlan = 'Monthly Jolcast Plan';
   static const String planDescription =
       'Enjoy unlimited podcast for 24 hours.\nYou can cancel at anytime.';
   static const String oneTime = 'One-time';
@@ -40,7 +40,7 @@ class AppStrings {
 
   static const String allSet = "You're all set ";
   static const String subscribeMessage =
-      'Subscribe to a plan to enjoy Jolly Premium.\nGet access to all audio contents, personalize your library to your style and do more cool jolly stuff.';
+      'Subscribe to a plan to enjoy Jolcast Premium.\nGet access to all audio contents, personalize your library to your style and do more cool Jolcast stuff.';
   static const String seePlans = 'See plans';
   static const String termsVerify =
       'By continuing, you verify that you are at least 18 years old, and you agree with our Terms and Refund policy.';

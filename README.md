@@ -1,12 +1,12 @@
-# 🎧 Jollycast - Podcast Streaming App
+# 🎧 Jolcast - Podcast Streaming App
 
 [![Build Android APK](https://github.com/decodedfaith/jollycast/actions/workflows/build-android.yml/badge.svg)](https://github.com/decodedfaith/jollycast/actions/workflows/build-android.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Flutter](https://img.shields.io/badge/Flutter-3.24.0-02569B?logo=flutter)](https://flutter.dev)
 
-A modern, feature-rich podcast streaming application built with Flutter. Jollycast provides a seamless experience for discovering, streaming, and enjoying your favorite podcasts.
+A modern, feature-rich podcast streaming application built with Flutter. Jolcast provides a seamless experience for discovering, streaming, and enjoying your favorite podcasts.
 
-![Demo of Jollycast App](docs/assets/demo.gif)
+![Demo of Jolcast App](docs/assets/demo.gif)
 
 ## ✨ Features
 
@@ -35,7 +35,7 @@ A modern, feature-rich podcast streaming application built with Flutter. Jollyca
 ### Option 2: Try in Browser (Appetize.io)
 [![Try on Appetize](https://img.shields.io/badge/Try%20Now-Appetize.io-orange?style=for-the-badge)](https://appetize.io/app/b_ph6y5cef7vb7m72ygcd24wq3ty?device=pixel7&osVersion=13.0&toolbar=true)
 
-**No installation needed!** Try Jollycast directly in your browser. See [Appetize Setup Guide](APPETIZE_SETUP.md) for details.
+**No installation needed!** Try Jolcast directly in your browser. See [Appetize Setup Guide](APPETIZE_SETUP.md) for details.
 
 ### Option 3: Beta Testing (Firebase App Distribution)
 Join our beta testing program for early access to new features. Contact the maintainer for an invitation.
@@ -199,7 +199,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Jolly Podcast API for providing the backend services
 - Flutter community for amazing packages and support
-- Bloocode Technology for the coding assessment opportunity
 - All contributors who help improve this project
 
 ## 📞 Support
