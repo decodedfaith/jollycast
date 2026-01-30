@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -131,7 +132,7 @@ class UserPreferencesService {
 
       return filePath;
     } catch (e) {
-      print('Error downloading episode: $e');
+      debugPrint('Error downloading episode: $e');
       return null;
     }
   }
@@ -152,7 +153,7 @@ class UserPreferencesService {
       await _prefs.remove('download_path_$episodeId');
       return await _prefs.setStringList(_downloadsKey, downloads);
     } catch (e) {
-      print('Error removing download: $e');
+      debugPrint('Error removing download: $e');
       return false;
     }
   }
