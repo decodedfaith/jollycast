@@ -592,6 +592,51 @@ class _EpisodeListScreenState extends ConsumerState<EpisodeListScreen>
                 ],
               ),
             ),
+            // Download button
+            if (ref
+                .watch(userPreferencesViewModelProvider)
+                .downloadedEpisodeIds
+                .contains(episode.id))
+              IconButton(
+                icon: const Icon(
+                  Icons.download_done,
+                  color: Color(0xFF00A86B),
+                  size: 20,
+                ),
+                onPressed: () {
+                  ref
+                      .read(userPreferencesViewModelProvider.notifier)
+                      .removeDownload(episode.id);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Download removed')),
+                  );
+                },
+                constraints: const BoxConstraints(),
+                padding: EdgeInsets.zero,
+              )
+            else
+              IconButton(
+                icon: const Icon(
+                  Icons.download_outlined,
+                  color: Colors.white54,
+                  size: 20,
+                ),
+                onPressed: () {
+                  ref
+                      .read(userPreferencesViewModelProvider.notifier)
+                      .downloadEpisode(
+                        episode.id,
+                        episode.audioUrl,
+                        '${episode.id}.mp3',
+                      );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Downloading episode...')),
+                  );
+                },
+                constraints: const BoxConstraints(),
+                padding: EdgeInsets.zero,
+              ),
+            const SizedBox(width: 8),
             // More options
             IconButton(
               icon: const Icon(

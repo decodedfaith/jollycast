@@ -1,5 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 
 class UserPreferencesService {
   static const String _favoritesKey = 'favorite_episodes';
@@ -103,18 +106,80 @@ class UserPreferencesService {
         .toList();
   }
 
-  // Downloads (placeholder for now)
-  Future<bool> markForDownload(String episodeId) async {
-    final downloads = await getDownloadedEpisodes();
-    if (!downloads.contains(episodeId)) {
-      downloads.add(episodeId);
+  // Downloads
+  Future<String?> downloadEpisode(
+    String episodeId,
+    String url,
+    String filename,
+  ) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$filename';
+
+      // Use Dio to download
+      final dio = Dio();
+      await dio.download(url, filePath);
+
+      final downloads = await getDownloadedEpisodes();
+      if (!downloads.contains(episodeId)) {
+        downloads.add(episodeId);
+      }
+
+      // Save the file path mapping
+      await _prefs.setString('download_path_$episodeId', filePath);
+      await _prefs.setStringList(_downloadsKey, downloads);
+
+      return filePath;
+    } catch (e) {
+      print('Error downloading episode: $e');
+      return null;
     }
-    return await _prefs.setStringList(_downloadsKey, downloads);
+  }
+
+  Future<bool> removeDownload(String episodeId) async {
+    try {
+      final filePath = _prefs.getString('download_path_$episodeId');
+      if (filePath != null) {
+        final file = File(filePath);
+        if (await file.exists()) {
+          await file.delete();
+        }
+      }
+
+      final downloads = await getDownloadedEpisodes();
+      downloads.remove(episodeId);
+
+      await _prefs.remove('download_path_$episodeId');
+      return await _prefs.setStringList(_downloadsKey, downloads);
+    } catch (e) {
+      print('Error removing download: $e');
+      return false;
+    }
+  }
+
+  Future<String?> getDownloadedEpisodePath(String episodeId) async {
+    final filePath = _prefs.getString('download_path_$episodeId');
+    if (filePath != null) {
+      final file = File(filePath);
+      if (await file.exists()) {
+        return filePath;
+      }
+    }
+    return null;
   }
 
   Future<bool> isDownloaded(String episodeId) async {
     final downloads = await getDownloadedEpisodes();
-    return downloads.contains(episodeId);
+    if (!downloads.contains(episodeId)) return false;
+
+    // Verify file actually exists
+    final path = await getDownloadedEpisodePath(episodeId);
+    if (path == null) {
+      // Clean up if file is missing
+      await removeDownload(episodeId);
+      return false;
+    }
+    return true;
   }
 
   Future<List<String>> getDownloadedEpisodes() async {
@@ -123,6 +188,12 @@ class UserPreferencesService {
 
   // Clear all data
   Future<bool> clearAll() async {
+    // Clear downloads first
+    final downloads = await getDownloadedEpisodes();
+    for (final id in downloads) {
+      await removeDownload(id);
+    }
+
     await _prefs.remove(_favoritesKey);
     await _prefs.remove(_followsKey);
     await _prefs.remove(_recentlyPlayedKey);

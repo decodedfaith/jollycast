@@ -99,8 +99,17 @@ class UserPreferencesViewModel extends Notifier<UserPreferencesState> {
     await _loadPreferences();
   }
 
-  Future<void> markForDownload(String episodeId) async {
-    await _service.markForDownload(episodeId);
+  Future<void> downloadEpisode(
+    String episodeId,
+    String url,
+    String filename,
+  ) async {
+    await _service.downloadEpisode(episodeId, url, filename);
+    await _loadPreferences();
+  }
+
+  Future<void> removeDownload(String episodeId) async {
+    await _service.removeDownload(episodeId);
     await _loadPreferences();
   }
 
